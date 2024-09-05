@@ -19,7 +19,6 @@ class StoreService {
         return Check(cart.clientId , Statuses.FAILURE , 0.0)
     }
 
-
 /*
     fun checkPayment (payment: Payment ,price : Double): Boolean {
     return when(payment){
