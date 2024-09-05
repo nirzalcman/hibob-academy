@@ -14,17 +14,17 @@ Collapse
 
 
 
-data class Store (val day :DayOfWeek , val products :List<String>) {
-    val open = day != DayOfWeek.SATURDAY
-    val number = products.size
-    var counter = 0
-    val recepits : List<String>
-            get(){
-                println("heavy function")
-                counter++
-                return listOf("rec1", "rec2","rec3")
-    }
-    lateinit var vairable : String
+data class Store(val day: DayOfWeek, val products: List<String>) {
+    val isOpen = day != DayOfWeek.SATURDAY
+    val numberOfProducts = products.size
+    var counterRecepitsCalls = 0
+    val recepits: List<String>
+        get() {
+            println("heavy function")
+            counterRecepitsCalls++
+            return listOf("rec1", "rec2", "rec3")
+        }
+    lateinit var vairable: String
 
 
     fun create() {

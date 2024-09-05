@@ -2,27 +2,28 @@ package com.hibob.kotlinBasic
 
 import java.time.LocalDate
 
-enum class CreditCardType{
-    VISA , MASTERCARD , DISCOVER , AMERICAN_EXPRESS
+enum class CreditCardType {
+    VISA, MASTERCARD, DISCOVER, AMERICAN_EXPRESS
 }
 
-enum class Statuses{
-    SUCCESS , FAILURE
+enum class Statuses {
+    SUCCESS, FAILURE
 }
 
-data class Cart(val clientId : String , val products : List<Product>)
+data class Cart(val clientId: String, val products: List<Product>)
 
-data class Product(val id  : String ,val name : String, val price : Double , val custom : Any )
+data class Product(val id: String, val name: String, val price: Double, val custom: Any)
 
 sealed class Payment {
-    data class CreditCard(val number : String , val expiryDate : LocalDate , val type : CreditCardType ,val limit : Double) : Payment()
-    data class PayPal(val email : String ) : Payment()
-    data object Cash  : Payment()
+    data class CreditCard(val number: String, val expiryDate: LocalDate, val type: CreditCardType, val limit: Double) :
+        Payment()
+
+    data class PayPal(val email: String) : Payment()
+    data object Cash : Payment()
 
 }
 
-data class Check(val id : String , val status : Statuses , val total : Double )
-
+data class Check(val id: String, val status: Statuses, val total: Double)
 
 
 //1. create data class of Cart that include: client Id and list of Products
