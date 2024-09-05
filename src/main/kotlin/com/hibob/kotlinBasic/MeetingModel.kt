@@ -56,7 +56,6 @@ val usLocation = USlocation("USA", "New York", "5th Avenue", "2024")
 val participant= ( Participant("John Doe", "john.doe@example.com"))
 val reviewer = Reviewer("Jane Smith", "John Doe" to "Excellent work")
 
-
 val personalReview = PersonalReview(
     "Performance ",
     usLocation,
