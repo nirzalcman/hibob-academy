@@ -10,14 +10,14 @@ import java.time.LocalDate
 */
 
 fun main() {
-    val movie = SpidermanNoWayHome()
+    val movie : SpidermanMovieProduceActions = createGoodMovie()
     val runner = Runner(movie)
     val success = runner.init
 
     if (success != null) {
         printSuccessMessage(success)
     }
-    println("Pretty print: ${movie.prettyPrint}")
+    println(movie.prettyPrint)
 //    println("Json: ${movie.toJson()}")
 }
 
@@ -40,12 +40,10 @@ interface SpidermanMovieProduceActions {
     val title: String
     val airDate: LocalDate
     val imdbRank: Double
+    val  prettyPrint : String
 }
 
 class SpidermanNoWayHome() : SpidermanMovieProduceActions {
-
-    val createGoodMovie = SpidermanNoWayHome().apply { title = "Spiderman - No Way Home"
-    }
 
 
     override val title: String = "Spiderman - No Way Home"
@@ -53,10 +51,12 @@ class SpidermanNoWayHome() : SpidermanMovieProduceActions {
     override val imdbRank: Double = 9.6
 
 
-    val prettyPrint = buildString {
-        append(title)
-        append(airDate)
-        append(imdbRank.toString())
+
+
+    override val prettyPrint = buildString {
+       appendLine("Title : ${title}")
+        appendLine("AirDate: ${airDate}")
+        appendLine("IMDB rank: ${imdbRank.toString()}")
     }
 
     override fun signTobeyMaguire() {
@@ -119,6 +119,9 @@ class Runner(private val movieProducer: SpidermanMovieProduceActions?){
 
 }
 
+fun createGoodMovie(): SpidermanMovieProduceActions{
+    return  SpidermanNoWayHome()
+}
 
 
 
