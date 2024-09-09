@@ -1,7 +1,7 @@
 package com.hibob.academy.resource
 
 
-
+import com.hibob.academy.model.Owner
 import jakarta.ws.rs.*
 import jakarta.ws.rs.core.MediaType
 import jakarta.ws.rs.core.Response
@@ -16,41 +16,43 @@ import org.springframework.web.bind.annotation.RequestBody
 class OwnerResource {
 
     @GET
-    fun getAllOwners(): Response{
-        val owners= listOf(Owner("1212121212" , "Nir" ,null,null) , Owner("14342324" , "Yosi" ,null,null))
+    fun getAllOwners(): Response {
+        val owners = listOf(Owner("1212121212", "Nir", null, null), Owner("14342324", "Yosi", null, null))
         return Response.ok(owners).build()
 
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    fun addOwner(@RequestBody owner: Owner): Response{
-        val new_owner = if (owner.firstName!=null && owner.lastName!=null) {Owner(owner.id,owner.firstName + " " + owner.lastName,owner.firstName,owner.lastName)}
-        else   {
+    fun addOwner(@RequestBody owner: Owner): Response {
+        val newOwner = if (owner.firstName.isNullOrEmpty() && owner.lastName.isNullOrEmpty()) {
+            Owner(owner.id, owner.firstName + " " + owner.lastName, owner.firstName, owner.lastName)
+        } else {
             val firstName = owner.name?.split(" ")?.first()
-            val lastName = owner.name?.split(" ")?.last()
-            Owner(owner.id,owner.name,firstName,lastName)
+            val lastName = owner.name?.substringAfter(" ")
+            Owner(owner.id, owner.name, firstName, lastName)
         }
-        return Response.ok(new_owner).build()
+        return Response.ok(newOwner).build()
     }
 
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    fun updateOwner(@RequestBody owner: Owner): Response{
-        val update_owner = if (owner.firstName!=null && owner.lastName!=null) {Owner(owner.id,owner.firstName + " " + owner.lastName,owner.firstName,owner.lastName)}
-        else   {
+    fun updateOwner(@RequestBody owner: Owner): Response {
+        val updateOwner = if (owner.firstName.isNullOrEmpty() && owner.lastName.isNullOrEmpty()) {
+            Owner(owner.id, owner.firstName + " " + owner.lastName, owner.firstName, owner.lastName)
+        } else {
             val firstName = owner.name?.split(" ")?.first()
             val lastName = owner.name?.split(" ")?.last()
-            Owner(owner.id,owner.name,firstName,lastName)
+            Owner(owner.id, owner.name, firstName, lastName)
         }
-        return Response.ok(update_owner).build()
+        return Response.ok(updateOwner).build()
     }
 
 
     @DELETE
-    @Path("{id}")
-    fun deleteOwner(@PathParam("id") id: String): Response{
+    @Path("/{id}")
+    fun deleteOwner(@PathParam("id") id: String): Response {
         println("owner with id $id has been deleted")
         return Response.ok().build()
     }
@@ -58,4 +60,3 @@ class OwnerResource {
 }
 
 
-data class Owner(val id: String, val name : String?,val firstName :String?, val lastName :String?)
