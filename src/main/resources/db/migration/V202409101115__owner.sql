@@ -2,8 +2,8 @@ create table owner
 (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255),
-    company_id UUID,
-    employee_id UUID
+    company_id BIGINT NOT NULL ,
+    employee_id VARCHAR NOT NULL
 );
 
 
