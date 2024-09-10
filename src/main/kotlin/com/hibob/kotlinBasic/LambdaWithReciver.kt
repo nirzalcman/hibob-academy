@@ -115,6 +115,7 @@ class Runner(private val movieProducer: SpidermanMovieProduceActions?) {
                 signTom()
                 getVillains()
                 publish()
+                return true
             }
         }
         return false
