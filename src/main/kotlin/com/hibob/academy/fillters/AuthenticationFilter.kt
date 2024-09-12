@@ -10,14 +10,16 @@ import org.springframework.stereotype.Component
 import jakarta.ws.rs.core.Response
 import jakarta.ws.rs.ext.Provider
 
+
+const val JWT_COOKIE_NAME = "jwt"
+const val PATH = "api/user_session"
 @Provider
 @Component
 class AuthenticationFilter(private val sessionService: SessionService) : ContainerRequestFilter {
-
     override fun filter(requestContext: ContainerRequestContext) {
-        if (requestContext.uriInfo.path == "api/user_session") return
-        val jwtCookie: Cookie? = requestContext.cookies["jwt"]
-        val claims: Claims? = sessionService.verify(jwtCookie?.value)
+        if (requestContext.uriInfo.path == PATH) return
+        val jwtCookie: Cookie? = requestContext.cookies[PATH]
+        val claims = jwtCookie?.let { sessionService.verify(it.value) }
 
         if (claims == null) {
             requestContext.abortWith(
