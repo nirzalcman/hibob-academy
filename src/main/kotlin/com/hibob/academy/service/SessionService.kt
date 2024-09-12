@@ -29,16 +29,15 @@ class SessionService {
     }
 
     fun verify(token: String?): Claims? {
-        return token?.let {
-            try {
-                Jwts.parser()
-                    .setSigningKey(secretKey)
-                    .parseClaimsJws(it)
-                    .body
-            } catch (e: Exception) {
-                null
-            }
+        return try {
+            Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token)
+                .body
+        } catch (e: Exception) {
+            null
         }
+
 
     }
 }
