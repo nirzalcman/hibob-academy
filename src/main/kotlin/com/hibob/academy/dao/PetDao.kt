@@ -25,9 +25,7 @@ data class PetWithOutType(val name: String, val dateOfArivval: Date, val company
 class PetDao(private val sql: DSLContext) {
     private val table = PetTable.instance
 
-    private val petWithOutTypeMapper = RecordMapper<Record, PetWithOutType> { record ->
-        PetWithOutType(record[table.name], record[table.dateOfArrival], record[table.companyId])
-    }
+
 
     private val petMapper = RecordMapper<Record, Pet> { record ->
         Pet(
@@ -40,11 +38,11 @@ class PetDao(private val sql: DSLContext) {
         )
     }
 
-    fun getPetsByType(type: String, companyId: Long): List<PetWithOutType> =
-        sql.select(table.name, table.dateOfArrival, table.companyId)
+    fun getPetsByType(type: String, companyId: Long): List<Pet> =
+        sql.select(table.id, table.name, table.type, table.dateOfArrival, table.companyId, table.ownerId)
             .from(table)
             .where(table.type.eq(type), table.companyId.eq(companyId))
-            .fetch(petWithOutTypeMapper)
+            .fetch(petMapper)
 
 
     fun createPet(pet: Pet): Long {

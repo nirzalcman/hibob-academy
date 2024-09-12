@@ -27,9 +27,9 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext) {
 
     @Test
     fun `validate insert pet and retrieve it by type`() {
-        dao.createPet(Pet(null, "Tomtom", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId))
+        val idPet =dao.createPet(Pet(null, "Tomtom", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId))
         val pets = dao.getPetsByType("Dog", companyId)
-        assertEquals(listOf(PetWithOutType("Tomtom", Date.valueOf(LocalDate.now()), companyId)), pets)
+        assertEquals(listOf(Pet(idPet,"Tomtom", "Dog",Date.valueOf(LocalDate.now()), companyId, ownerId)), pets)
 
     }
 
