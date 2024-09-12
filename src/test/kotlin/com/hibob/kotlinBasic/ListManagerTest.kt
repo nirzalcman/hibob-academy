@@ -144,7 +144,7 @@ class ListManagerTest {
 
         peopleStatistics?.let {
             assertEquals(27.0, it.averageAge)
-            assertEquals(person, it.youngest) // Since all have the same age, any person can be the youngest/oldest
+            assertEquals(person, it.youngest)
             assertEquals(person, it.oldest)
             assertEquals(mapOf(27 to 1), it.ageCount)
 
