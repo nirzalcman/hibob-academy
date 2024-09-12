@@ -1,5 +1,4 @@
 package com.hibob.kotlinBasic
-
 class BankAccount(private var balance: Double) {
 
     fun deposit(amount: Double): Double {

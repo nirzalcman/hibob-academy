@@ -41,8 +41,8 @@ class BankAccountTest {
     @Test
     fun `withdraw negative or zero amount throws IllegalArgumentException`() {
         val bankAccount = BankAccount(20.0)
-        assertThrows(IllegalArgumentException::class.java) {bankAccount.withdraw(-1.0)}
-        assertThrows(IllegalArgumentException::class.java) {bankAccount.withdraw(0.0)}
+        assertThrows(IllegalArgumentException::class.java) { bankAccount.withdraw(-1.0) }
+        assertThrows(IllegalArgumentException::class.java) { bankAccount.withdraw(0.0) }
     }
 
     @Test

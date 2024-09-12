@@ -25,6 +25,7 @@ class ListManager {
     fun getPeople(): List<Person> {
         return people
     }
+
     fun getPeopleSortedByAgeAndName(): List<Person> {
         return people.sortedWith(compareBy<Person> { it.age }.thenBy { it.name })
     }
