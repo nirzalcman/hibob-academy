@@ -24,7 +24,8 @@ data class PetWithOutType(val name: String, val dateOfArivval: Date, val company
 @Component
 class PetDao(private val sql: DSLContext) {
     private val table = PetTable.instance
-
+    private val ownerTable = OwnerTable.instance
+    private val ownerDao = OwnerDao(sql)
 
 
     private val petMapper = RecordMapper<Record, Pet> { record ->
@@ -71,6 +72,14 @@ class PetDao(private val sql: DSLContext) {
             .execute()
 
 
+    fun getOwnerByPetId(petId: Long, companyId: Long): Owner? {
+        val pet = getPetById(petId, companyId)
+        return pet?.let {
+            ownerDao.getOwnerById(it.ownerId, companyId)
+        }
+
+
+    }
 }
 
 

@@ -12,6 +12,7 @@ import kotlin.random.Random
 @BobDbTest
 class OwnerDaoTest @Autowired constructor(private val sql: DSLContext) {
 
+
     val table = OwnerTable.instance
     val ownerDao = OwnerDao(sql)
     val companyId = Random.nextLong()

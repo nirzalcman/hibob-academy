@@ -13,6 +13,9 @@ import kotlin.random.Random
 
 @BobDbTest
 class PetDaoTest @Autowired constructor(private val sql: DSLContext) {
+
+    private val ownerTable = OwnerTable.instance
+    private val ownerDao = OwnerDao(sql)
     private val table = PetTable.instance
     private val dao = PetDao(sql)
     private val companyId = Random.nextLong()
@@ -62,6 +65,23 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext) {
         val res = dao.updatePetOwner(petId + 1, ownerId, companyId)
 
         assertEquals(0, res)
+    }
+
+    @Test
+    fun `validate that getOwnerByPetId retrieves the correct owner`() {
+        val owner = Owner(null, "Nir", companyId, "EMP123")
+        val ownerId = ownerDao.createOwner(owner)
+
+        val pet = Pet(null, "Tomtom", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId)
+        val petId = dao.createPet(pet)
+
+        val retrievedOwner = dao.getOwnerByPetId(petId, companyId)
+
+        assertNotNull(retrievedOwner)
+        assertEquals(ownerId, retrievedOwner?.id)
+        assertEquals(owner.name, retrievedOwner?.name)
+        assertEquals(owner.companyId, retrievedOwner?.companyId)
+        assertEquals(owner.employId, retrievedOwner?.employId)
     }
 
 }
