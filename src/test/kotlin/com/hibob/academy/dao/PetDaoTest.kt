@@ -12,12 +12,11 @@ import java.time.LocalDate
 import kotlin.random.Random
 
 @BobDbTest
-class PetDaoTest @Autowired constructor(private val sql: DSLContext){
+class PetDaoTest @Autowired constructor(private val sql: DSLContext) {
     private val table = PetTable.instance
     private val dao = PetDao(sql)
     private val companyId = Random.nextLong()
     private val ownerId = Random.nextLong()
-
 
 
     @BeforeEach
@@ -27,17 +26,17 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext){
     }
 
     @Test
-    fun  `validate insert pet and retrieve it by type`(){
-        dao.createPet(Pet("Tomtom","Dog", Date.valueOf(LocalDate.now()), companyId,ownerId))
-        val pets = dao.getPetsByType("Dog")
-        assertEquals(listOf(PetWithOutType("Tomtom",Date.valueOf(LocalDate.now()),companyId)), pets)
+    fun `validate insert pet and retrieve it by type`() {
+        dao.createPet(Pet(null, "Tomtom", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId))
+        val pets = dao.getPetsByType("Dog", companyId)
+        assertEquals(listOf(PetWithOutType("Tomtom", Date.valueOf(LocalDate.now()), companyId)), pets)
 
     }
 
     @Test
     fun `get by type when in the db not exists pets with this type`() {
-        dao.createPet(Pet("Tomtom","Dog", Date.valueOf(LocalDate.now()), companyId,ownerId))
-        val pets = dao.getPetsByType("Cat")
+        dao.createPet(Pet(null, "Tomtom", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId))
+        val pets = dao.getPetsByType("Cat", companyId)
         assertEquals(emptyList<Pet>(), pets)
     }
 
@@ -47,25 +46,25 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext){
         val initialOwnerId = 100L
         val newOwnerId = 200L
 
-        val pet = Pet("Tomtom", "Dog", Date.valueOf(LocalDate.now()), companyId, initialOwnerId)
+        val pet = Pet(null, "Tomtom", "Dog", Date.valueOf(LocalDate.now()), companyId, initialOwnerId)
         val petId = dao.createPet(pet)
 
-        dao.updatePetOwner(petId, newOwnerId)
-        val retrivePet = dao.getPetById(petId)
+        dao.updatePetOwner(petId, newOwnerId, companyId)
+        val retrivePet = dao.getPetById(petId, companyId)
 
-            assertEquals(newOwnerId,retrivePet?.ownerId)
-        }
+        assertEquals(newOwnerId, retrivePet?.ownerId)
+    }
 
     @Test
     fun `validate that updating a non-existent pet returns 0`() {
-        val petId = dao.createPet(Pet("Tomtom","Dog", Date.valueOf(LocalDate.now()), companyId, ownerId))
+        val petId = dao.createPet(Pet(null, "Tomtom", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId))
         val ownerId = 100L
-        val res = dao.updatePetOwner(petId+1, ownerId)
+        val res = dao.updatePetOwner(petId + 1, ownerId, companyId)
 
         assertEquals(0, res)
     }
 
-    }
+}
 
 
 

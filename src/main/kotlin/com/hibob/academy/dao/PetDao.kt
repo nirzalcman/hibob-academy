@@ -10,12 +10,19 @@ import java.time.LocalDateTime
 import java.sql.Date
 
 
-data class Pet(val name: String, val type: String, val dateOfArivval: Date, val companyId: Long , val ownerId: Long )
+data class Pet(
+    val id: Long?,
+    val name: String,
+    val type: String,
+    val dateOfArivval: Date,
+    val companyId: Long,
+    val ownerId: Long
+)
 
 data class PetWithOutType(val name: String, val dateOfArivval: Date, val companyId: Long)
 
 @Component
-class PetDao(private val sql: DSLContext ) {
+class PetDao(private val sql: DSLContext) {
     private val table = PetTable.instance
 
     private val petWithOutTypeMapper = RecordMapper<Record, PetWithOutType> { record ->
@@ -23,13 +30,20 @@ class PetDao(private val sql: DSLContext ) {
     }
 
     private val petMapper = RecordMapper<Record, Pet> { record ->
-        Pet(record[table.name],record[table.type], record[table.dateOfArrival], record[table.companyId], record[table.ownerId])
+        Pet(
+            record[table.id],
+            record[table.name],
+            record[table.type],
+            record[table.dateOfArrival],
+            record[table.companyId],
+            record[table.ownerId]
+        )
     }
 
-    fun getPetsByType(type: String): List<PetWithOutType> =
+    fun getPetsByType(type: String, companyId: Long): List<PetWithOutType> =
         sql.select(table.name, table.dateOfArrival, table.companyId)
             .from(table)
-            .where(table.type.eq(type))
+            .where(table.type.eq(type), table.companyId.eq(companyId))
             .fetch(petWithOutTypeMapper)
 
 
@@ -40,28 +54,23 @@ class PetDao(private val sql: DSLContext ) {
             .set(table.type, pet.type)
             .set(table.ownerId, pet.ownerId)
             .returningResult(table.id)
-            .fetchOne()
+            .fetchOne()!!
         return res?.get(table.id) ?: 0
     }
 
 
-
-    fun getPetById(petId: Long): Pet? =
-         sql.select(table.name, table.type, table.dateOfArrival, table.companyId, table.ownerId)
+    fun getPetById(petId: Long, companyId: Long): Pet? =
+        sql.select(table.id, table.name, table.type, table.dateOfArrival, table.companyId, table.ownerId)
             .from(table)
-            .where(table.id.eq(petId))
+            .where(table.id.eq(petId), table.companyId.eq(companyId))
             .fetchOne(petMapper)
 
 
-
-    fun updatePetOwner(petId: Long, ownerId: Long): Int =
+    fun updatePetOwner(petId: Long, ownerId: Long, companyId: Long): Int =
         sql.update(table)
             .set(table.ownerId, ownerId)
-            .where(table.id.eq(petId))
+            .where(table.id.eq(petId), table.companyId.eq(companyId))
             .execute()
-
-
-
 
 
 }
