@@ -18,7 +18,7 @@ const val PATH = "api/user_session"
 class AuthenticationFilter(private val sessionService: SessionService) : ContainerRequestFilter {
     override fun filter(requestContext: ContainerRequestContext) {
         if (requestContext.uriInfo.path == PATH) return
-        val jwtCookie: Cookie? = requestContext.cookies[PATH]
+        val jwtCookie: Cookie? = requestContext.cookies[JWT_COOKIE_NAME]
         val claims = jwtCookie?.let { sessionService.verify(it.value) }
 
         if (claims == null) {
