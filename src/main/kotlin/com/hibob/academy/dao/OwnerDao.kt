@@ -1,5 +1,6 @@
 package com.hibob.academy.dao
 
+import jakarta.ws.rs.BadRequestException
 import org.jooq.DSLContext
 import org.jooq.Record
 import org.jooq.RecordMapper
@@ -16,18 +17,13 @@ data class Owner(val id: Long, val name: String, val companyId: Long, val employ
 @Component
 class OwnerDao(private val sql: DSLContext) {
     private val table = OwnerTable.instance
+    private val petTable = PetTable.instance
 
 
-    companion object {
-        val ownerMapper = RecordMapper<Record, Owner> { record ->
-            Owner(
-                id = record[OwnerTable.instance.id],
-                name = record[OwnerTable.instance.name],
-                companyId = record[OwnerTable.instance.companyId],
-                employId = record[OwnerTable.instance.employId]
-            )
-        }
+    val ownerMapper = RecordMapper<Record, Owner> { record ->
+        Owner(record[table.id], record[table.name], record[table.companyId], record[table.employId])
     }
+
 
     fun getOwners(companyId: Long): List<Owner> =
         sql.select(table.id, table.name, table.companyId, table.employId)
@@ -46,7 +42,7 @@ class OwnerDao(private val sql: DSLContext) {
             .returningResult(table.id)
             .fetchOne()
 
-        return res?.get(table.id)?: 0L
+        return res?.get(table.id) ?: throw BadRequestException("Owner creation Failed")
 
 
     }
@@ -56,4 +52,14 @@ class OwnerDao(private val sql: DSLContext) {
             .from(table)
             .where(table.id.eq(id), table.companyId.eq(companyId))
             .fetchOne(ownerMapper)
+
+
+    fun getOwnerByPetId(petId: Long, companyId: Long): Owner? {
+        return sql.select(table.id, table.name, table.companyId, table.employId)
+            .from(petTable)
+            .leftJoin(table)
+            .on(petTable.ownerId.eq(table.id))
+            .where(petTable.id.eq(petId), petTable.companyId.eq(companyId))
+            .fetchOne(ownerMapper)
+    }
 }

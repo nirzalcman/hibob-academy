@@ -68,22 +68,6 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext) {
         assertEquals(0, res)
     }
 
-    @Test
-    fun `validate that getOwnerByPetId retrieves the correct owner`() {
-        val owner = OwnerCreationRequest( "Nir", companyId, "EMP123")
-        val ownerId = ownerDao.createOwner(owner)
-
-        val pet = PetCreationRequest( "Tomtom", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId)
-        val petId = dao.createPet(pet)
-
-        val retrievedOwner = dao.getOwnerByPetId(petId, companyId)
-
-        assertNotNull(retrievedOwner)
-        assertEquals(ownerId, retrievedOwner?.id)
-        assertEquals(owner.name, retrievedOwner?.name)
-        assertEquals(owner.companyId, retrievedOwner?.companyId)
-        assertEquals(owner.employId, retrievedOwner?.employId)
-    }
 
 }
 
