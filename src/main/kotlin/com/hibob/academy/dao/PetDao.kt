@@ -14,7 +14,7 @@ data class PetCreationRequest(
     val type: String,
     val dateOfArivval: Date,
     val companyId: Long,
-    val ownerId: Long
+    val ownerId: Long? = null
 )
 
 data class Pet(
@@ -23,14 +23,13 @@ data class Pet(
     val type: String,
     val dateOfArivval: Date,
     val companyId: Long,
-    val ownerId: Long
+    val ownerId: Long?
 )
 
 
 @Component
 class PetDao(private val sql: DSLContext) {
     private val table = PetTable.instance
-
 
 
     private val petMapper = RecordMapper<Record, Pet> { record ->
@@ -52,15 +51,14 @@ class PetDao(private val sql: DSLContext) {
 
 
     fun createPet(pet: PetCreationRequest): Long =
-         sql.insertInto(table)
+        sql.insertInto(table)
             .set(table.name, pet.name)
             .set(table.companyId, pet.companyId)
             .set(table.type, pet.type)
             .set(table.ownerId, pet.ownerId)
-             .returningResult(table.id)
-             .fetchOne()!!
-             .get(table.id)
-
+            .returningResult(table.id)
+            .fetchOne()!!
+            .get(table.id)
 
 
     fun getPetById(petId: Long, companyId: Long): Pet? =
@@ -77,8 +75,7 @@ class PetDao(private val sql: DSLContext) {
             .execute()
 
 
-
-    }
+}
 
 
 
