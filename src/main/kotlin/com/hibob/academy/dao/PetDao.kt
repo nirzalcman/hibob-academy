@@ -1,5 +1,6 @@
 package com.hibob.academy.dao
 
+import com.hibob.academy.dao.OwnerDao.Companion.ownerMapper
 import org.jooq.DSLContext
 import org.jooq.Record
 import org.jooq.RecordMapper
@@ -31,7 +32,6 @@ data class Pet(
 class PetDao(private val sql: DSLContext) {
     private val table = PetTable.instance
     private val ownerTable = OwnerTable.instance
-    private val ownerDao = OwnerDao(sql)
 
 
     private val petMapper = RecordMapper<Record, Pet> { record ->
@@ -81,10 +81,10 @@ class PetDao(private val sql: DSLContext) {
     fun getOwnerByPetId(petId: Long, companyId: Long): Owner? {
         return sql.select(ownerTable.id, ownerTable.name, ownerTable.companyId, ownerTable.employId)
             .from(table)
-            .join(ownerTable)
-            .on(table.ownerId.eq(ownerTable.id))
+            .leftJoin(ownerTable)
+            .on(table.ownerId.eq(ownerTable.id)) // Left join to handle pets without owners
             .where(table.id.eq(petId), table.companyId.eq(companyId))
-            .fetchOne(ownerDao.ownerMapper)
+            .fetchOne(ownerMapper)
     }
 
 

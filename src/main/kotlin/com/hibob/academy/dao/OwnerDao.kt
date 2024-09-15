@@ -18,8 +18,15 @@ class OwnerDao(private val sql: DSLContext) {
     private val table = OwnerTable.instance
 
 
-    val ownerMapper = RecordMapper<Record, Owner> { record ->
-        Owner(record[table.id], record[table.name], record[table.companyId], record[table.employId])
+    companion object {
+        val ownerMapper = RecordMapper<Record, Owner> { record ->
+            Owner(
+                id = record[OwnerTable.instance.id],
+                name = record[OwnerTable.instance.name],
+                companyId = record[OwnerTable.instance.companyId],
+                employId = record[OwnerTable.instance.employId]
+            )
+        }
     }
 
     fun getOwners(companyId: Long): List<Owner> =
