@@ -25,7 +25,7 @@ class OwnerDaoTest @Autowired constructor(private val sql: DSLContext) {
 
     @Test
     fun `validate that insert owners and read from the database`() {
-        val idOwner = ownerDao.createOwner(Owner(null, "nir", companyId, "1"))
+        val idOwner = ownerDao.createOwner(OwnerCreationRequest( "nir", companyId, "1"))
         val owners = ownerDao.getOwners(companyId)
         assertEquals(listOf(Owner(idOwner, "nir", companyId, "1")), owners)
 
@@ -33,8 +33,8 @@ class OwnerDaoTest @Autowired constructor(private val sql: DSLContext) {
 
     @Test
     fun `insert an owner with the same companyId and employeeId`() {
-        val idOwner = ownerDao.createOwner(Owner(null, "nir", companyId, "1"))
-        assertEquals(0, ownerDao.createOwner(Owner(null, "omer", companyId, "1")))
+        val idOwner = ownerDao.createOwner(OwnerCreationRequest( "nir", companyId, "1"))
+        assertEquals( 0L,ownerDao.createOwner(OwnerCreationRequest( "omer", companyId, "1")))
     }
 
     @Test
@@ -45,7 +45,7 @@ class OwnerDaoTest @Autowired constructor(private val sql: DSLContext) {
 
     @Test
     fun `validate that owner is retrieved by id from the database`() {
-        val id = ownerDao.createOwner(Owner(null, "nir", companyId, "1"))
+        val id = ownerDao.createOwner(OwnerCreationRequest( "nir", companyId, "1"))
         val retrievedOwner = ownerDao.getOwnerById(id, companyId)
 
         assertNotNull(retrievedOwner)

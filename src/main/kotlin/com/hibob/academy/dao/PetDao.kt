@@ -9,9 +9,7 @@ import java.math.BigInteger
 import java.time.LocalDateTime
 import java.sql.Date
 
-
-data class Pet(
-    val id: Long?,
+data class PetCreationRequest(
     val name: String,
     val type: String,
     val dateOfArivval: Date,
@@ -19,7 +17,15 @@ data class Pet(
     val ownerId: Long
 )
 
-data class PetWithOutType(val name: String, val dateOfArivval: Date, val companyId: Long)
+data class Pet(
+    val id: Long,
+    val name: String,
+    val type: String,
+    val dateOfArivval: Date,
+    val companyId: Long,
+    val ownerId: Long
+)
+
 
 @Component
 class PetDao(private val sql: DSLContext) {
@@ -46,16 +52,16 @@ class PetDao(private val sql: DSLContext) {
             .fetch(petMapper)
 
 
-    fun createPet(pet: Pet): Long {
-        val res = sql.insertInto(table)
+    fun createPet(pet: PetCreationRequest): Long =
+         sql.insertInto(table)
             .set(table.name, pet.name)
             .set(table.companyId, pet.companyId)
             .set(table.type, pet.type)
             .set(table.ownerId, pet.ownerId)
-            .returningResult(table.id)
-            .fetchOne()!!
-        return res?.get(table.id) ?: 0
-    }
+             .returningResult(table.id)
+             .fetchOne()!!
+             .get(table.id)
+
 
 
     fun getPetById(petId: Long, companyId: Long): Pet? =
@@ -73,14 +79,17 @@ class PetDao(private val sql: DSLContext) {
 
 
     fun getOwnerByPetId(petId: Long, companyId: Long): Owner? {
-        val pet = getPetById(petId, companyId)
-        return pet?.let {
-            ownerDao.getOwnerById(it.ownerId, companyId)
-        }
+        return sql.select(ownerTable.id, ownerTable.name, ownerTable.companyId, ownerTable.employId)
+            .from(table)
+            .join(ownerTable)
+            .on(table.ownerId.eq(ownerTable.id))
+            .where(table.id.eq(petId), table.companyId.eq(companyId))
+            .fetchOne(ownerDao.ownerMapper)
+    }
 
 
     }
-}
+
 
 
 

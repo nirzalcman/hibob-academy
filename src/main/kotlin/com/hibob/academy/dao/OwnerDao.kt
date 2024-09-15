@@ -8,7 +8,9 @@ import java.math.BigInteger
 import java.time.LocalDateTime
 import java.util.Date
 
-data class Owner(val id: Long?, val name: String, val companyId: Long, val employId: String)
+data class OwnerCreationRequest(val name: String, val companyId: Long, val employId: String)
+
+data class Owner(val id: Long, val name: String, val companyId: Long, val employId: String)
 
 
 @Component
@@ -16,7 +18,7 @@ class OwnerDao(private val sql: DSLContext) {
     private val table = OwnerTable.instance
 
 
-    private val ownerMapper = RecordMapper<Record, Owner> { record ->
+    val ownerMapper = RecordMapper<Record, Owner> { record ->
         Owner(record[table.id], record[table.name], record[table.companyId], record[table.employId])
     }
 
@@ -27,7 +29,7 @@ class OwnerDao(private val sql: DSLContext) {
             .fetch(ownerMapper)
 
 
-    fun createOwner(owner: Owner): Long {
+    fun createOwner(owner: OwnerCreationRequest): Long {
         val res = sql.insertInto(table)
             .set(table.name, owner.name)
             .set(table.companyId, owner.companyId)
@@ -37,9 +39,10 @@ class OwnerDao(private val sql: DSLContext) {
             .returningResult(table.id)
             .fetchOne()
 
-        return res?.get(table.id) ?: 0
-    }
+        return res?.get(table.id)?: 0L
 
+
+    }
 
     fun getOwnerById(id: Long, companyId: Long): Owner? =
         sql.select(table.id, table.name, table.companyId, table.employId)

@@ -26,11 +26,12 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext) {
     @AfterEach
     fun cleanup() {
         sql.deleteFrom(table).where(table.companyId.eq(companyId)).execute()
+        sql.deleteFrom(ownerTable).where(ownerTable.companyId.eq(companyId)).execute()
     }
 
     @Test
     fun `validate insert pet and retrieve it by type`() {
-        val idPet =dao.createPet(Pet(null, "Tomtom", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId))
+        val idPet =dao.createPet(PetCreationRequest( "Tomtom", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId))
         val pets = dao.getPetsByType("Dog", companyId)
         assertEquals(listOf(Pet(idPet,"Tomtom", "Dog",Date.valueOf(LocalDate.now()), companyId, ownerId)), pets)
 
@@ -38,7 +39,7 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext) {
 
     @Test
     fun `get by type when in the db not exists pets with this type`() {
-        dao.createPet(Pet(null, "Tomtom", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId))
+        dao.createPet(PetCreationRequest( "Tomtom", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId))
         val pets = dao.getPetsByType("Cat", companyId)
         assertEquals(emptyList<Pet>(), pets)
     }
@@ -49,7 +50,7 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext) {
         val initialOwnerId = 100L
         val newOwnerId = 200L
 
-        val pet = Pet(null, "Tomtom", "Dog", Date.valueOf(LocalDate.now()), companyId, initialOwnerId)
+        val pet = PetCreationRequest( "Tomtom", "Dog", Date.valueOf(LocalDate.now()), companyId, initialOwnerId)
         val petId = dao.createPet(pet)
 
         dao.updatePetOwner(petId, newOwnerId, companyId)
@@ -60,7 +61,7 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext) {
 
     @Test
     fun `validate that updating a non-existent pet returns 0`() {
-        val petId = dao.createPet(Pet(null, "Tomtom", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId))
+        val petId = dao.createPet(PetCreationRequest( "Tomtom", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId))
         val ownerId = 100L
         val res = dao.updatePetOwner(petId + 1, ownerId, companyId)
 
@@ -69,10 +70,10 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext) {
 
     @Test
     fun `validate that getOwnerByPetId retrieves the correct owner`() {
-        val owner = Owner(null, "Nir", companyId, "EMP123")
+        val owner = OwnerCreationRequest( "Nir", companyId, "EMP123")
         val ownerId = ownerDao.createOwner(owner)
 
-        val pet = Pet(null, "Tomtom", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId)
+        val pet = PetCreationRequest( "Tomtom", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId)
         val petId = dao.createPet(pet)
 
         val retrievedOwner = dao.getOwnerByPetId(petId, companyId)
