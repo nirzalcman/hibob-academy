@@ -55,6 +55,7 @@ class UserService(
             notificationService.sendEmail(user.email, "Welcome ${user.name}!")
         }
 
+
         return isUpdated
     }
 

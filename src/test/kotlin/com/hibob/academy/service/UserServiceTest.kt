@@ -130,7 +130,6 @@ class UserServiceTest {
 
     }
 
-
     @Test
     fun `verifyUserEmail should return false when user update fails`() {
         val user = User(
