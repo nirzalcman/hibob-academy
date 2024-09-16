@@ -76,6 +76,20 @@ class PetDao(private val sql: DSLContext) {
             .execute()
 
 
+    fun getPetsByOwner(ownerId : Long ) :List<Pet> =
+        sql.select(table.id, table.name, table.type, table.dateOfArrival, table.companyId, table.ownerId)
+            .from(table)
+            .where(table.ownerId.eq(ownerId))
+            .fetch(petMapper)
+
+
+    fun countPetsByType(): Map<String,Int> =
+        sql.select(table.type, DSL.count())
+            .from(table)
+            .groupBy(table.type)
+            .fetch()
+            .intoMap(table.type , DSL.count())
+
     fun getPetsByCompanyId(companyId: Long): List<Pet> =
         sql.select(table.id, table.name, table.type, table.dateOfArrival, table.companyId, table.ownerId)
             .from(table)

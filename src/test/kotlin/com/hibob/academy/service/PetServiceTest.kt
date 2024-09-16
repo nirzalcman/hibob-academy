@@ -93,6 +93,48 @@ class PetServiceTest {
     }
 
     @Test
+    fun `test getPetsByOwner returns list of pets`() {
+        val ownerId = 1L
+        val companyId = 1L
+        val expectedPets = listOf(
+            Pet(1L, "Dogidog", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId),
+            Pet(2L, "Catcat", "Cat", Date.valueOf(LocalDate.now()), companyId, ownerId)
+        )
+        whenever(petDaoMock.getPetsByOwner(ownerId)).thenReturn(expectedPets)
+
+        assertEquals(expectedPets, petService.getPetsByOwner(ownerId))
+        verify(petDaoMock).getPetsByOwner(ownerId)
+    }
+
+
+    @Test
+    fun `test getPetsByOwner returns empty list when no pets exist`() {
+        val ownerId = 1L
+        whenever(petDaoMock.getPetsByOwner(ownerId)).thenReturn(emptyList())
+
+        assertEquals(emptyList<Pet>(), petService.getPetsByOwner(ownerId))
+        verify(petDaoMock).getPetsByOwner(ownerId)
+    }
+
+    @Test
+    fun `test countPetsByType returns map of pet types and their counts`() {
+        val expectedMap = mapOf("Dog" to 2, "Cat" to 1)
+
+        whenever(petDaoMock.countPetsByType()).thenReturn(expectedMap)
+
+        assertEquals(expectedMap, petService.countPetsByType())
+        verify(petDaoMock).countPetsByType()
+    }
+
+    @Test
+    fun `test countPetsByType returns empty map when no pets exist`() {
+        whenever(petDaoMock.countPetsByType()).thenReturn(emptyMap())
+
+        assertEquals(emptyMap<String, Int>(),petService.countPetsByType())
+        verify(petDaoMock).countPetsByType()
+    }
+
+    @Test
     fun `test getPetsByCompanyId returns list of pets`() {
         val companyId = 1L
         val expectedPets = listOf(Pet(1L, "Tom", "Dog", Date.valueOf(LocalDate.now()), companyId, 10L))

@@ -26,6 +26,14 @@ class PetService(private val petDao: PetDao) {
         return if (petDao.updatePetOwner(petId, ownerId, companyId) > 0) true else throw NotFoundException("Pet Not Found")
 
     }
+
+    fun getPetsByOwner(ownerId : Long ) :List<Pet> {
+        return petDao.getPetsByOwner(ownerId)
+    }
+
+    fun countPetsByType(): Map<String,Int> {
+        return petDao.countPetsByType()
+    }
     fun getPetsByCompanyId(companyId: Long): List<Pet> {
         return petDao.getPetsByCompanyId(companyId)
     }

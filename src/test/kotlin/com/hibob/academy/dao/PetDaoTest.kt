@@ -70,6 +70,41 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext) {
     }
 
     @Test
+    fun `validate getPetsByOwner when there are pets with the same ownerId - return list with the pets`(){
+        val petId1 = dao.createPet(PetCreationRequest("Tomtom", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId))
+        val petId2 = dao.createPet(PetCreationRequest("Dogidog", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId))
+        val petId3 = dao.createPet(PetCreationRequest("Cticat", "Cat", Date.valueOf(LocalDate.now()), companyId, ownerId+1))
+
+        val pet1 =Pet(petId1,"Tomtom", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId)
+        val pet2 = Pet(petId2,"Dogidog", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId)
+        assertEquals(listOf(pet1,pet2),dao.getPetsByOwner(ownerId))
+    }
+
+    @Test
+    fun `validate getPetsByOwner when there are not pets with the same ownerId - return empty list`(){
+        val petId1 = dao.createPet(PetCreationRequest("Tomtom", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId))
+        assertEquals(emptyList<Pet>(), dao.getPetsByOwner(ownerId+1))
+    }
+
+
+    @Test
+    fun `validate countPetsByType  returns the count of pets grouped by type`() {
+        dao.createPet(PetCreationRequest("Tomtom", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId))
+        dao.createPet(PetCreationRequest("Dogidog", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId))
+        dao.createPet(PetCreationRequest("Cticat", "Cat", Date.valueOf(LocalDate.now()), companyId, ownerId))
+
+        assertEquals(mapOf("Dog" to 2, "Cat" to 1), dao.countPetsByType())
+    }
+
+    @Test
+    fun `validate countPetsByType returns empty map when no pets are present`() {
+        assertEquals(emptyMap<String, Int>(), dao.countPetsByType())
+    }
+
+
+
+
+    @Test
     fun `validate pets retrieval by companyId`() {
         val petId1 = dao.createPet(PetCreationRequest("dog1", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId))
         val petId2 = dao.createPet(PetCreationRequest("cat1", "Cat", Date.valueOf(LocalDate.now()), companyId, ownerId))
