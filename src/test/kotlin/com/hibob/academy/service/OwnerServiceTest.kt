@@ -18,7 +18,6 @@ class OwnerServiceTest {
     private val companyId = Random.nextLong()
     private val petId = Random.nextLong()
 
-
     @Test
     fun `getOwners should return a list of owners`() {
         val owners = listOf(
