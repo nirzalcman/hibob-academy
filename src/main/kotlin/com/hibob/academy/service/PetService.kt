@@ -6,7 +6,6 @@ import com.hibob.academy.dao.PetDao
 import jakarta.ws.rs.NotFoundException
 import org.springframework.stereotype.Component
 
-
 @Component
 class PetService(private val petDao: PetDao) {
 

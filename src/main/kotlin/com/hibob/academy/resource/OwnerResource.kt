@@ -22,7 +22,7 @@ class OwnerResource(private val ownerService: OwnerService) {
         return Response.status(Response.Status.CREATED).entity("Owner created successfully with ID: $ownerId").build()
     }
 
-//
+
     @GET
     @Path("/{companyId}")
     fun getOwners(@PathParam("companyId") companyId: Long): Response {
