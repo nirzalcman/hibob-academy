@@ -1,0 +1,8 @@
+CREATE TABLE vaccineToPet
+(
+    id BIGSERIAL PRIMARY KEY NOT NULL,
+    vaccine_id BIGINT NOT NULL,
+    pet_id BIGINT NOT NULL ,
+    vaccine_date DATE NOT NULL DEFAULT CURRENT_DATE
+);
+
