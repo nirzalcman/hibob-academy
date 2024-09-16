@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component
 @Path("/api/pets")
 class PetResource(private val petService: PetService) {
 
-
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{companyId}/type/{type}")

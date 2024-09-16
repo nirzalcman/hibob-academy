@@ -12,7 +12,6 @@ import org.mockito.kotlin.whenever
 import java.sql.Date
 import java.time.LocalDate
 
-
 class PetServiceTest {
     private val petDaoMock = mock<PetDao>()
     private val petService = PetService(petDaoMock)
