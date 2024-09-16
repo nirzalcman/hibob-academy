@@ -18,12 +18,12 @@ class PetService(private val petDao: PetDao) {
         return petDao.getPetsByType(type, companyId)
     }
 
-    fun getPetById(id: Long, companyId: Long): Pet? {
-        return petDao.getPetById(id, companyId)
+    fun getPetById(id: Long, companyId: Long): Pet {
+        return petDao.getPetById(id, companyId)?:throw NotFoundException("Pet Not Found")
     }
 
-    fun updatePetOwner(petId: Long, ownerId: Long, companyId: Long): Int {
-        return if (petDao.updatePetOwner(petId, ownerId, companyId) > 0) 1 else throw NotFoundException("Pet Not Found")
+    fun updatePetOwner(petId: Long, ownerId: Long, companyId: Long): Boolean {
+        return if (petDao.updatePetOwner(petId, ownerId, companyId) > 0) true else throw NotFoundException("Pet Not Found")
 
     }
 }

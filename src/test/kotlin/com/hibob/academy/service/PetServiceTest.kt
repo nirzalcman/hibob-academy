@@ -60,9 +60,9 @@ class PetServiceTest {
         val companyId = 1L
         whenever(petDaoMock.getPetById(petId, companyId)).thenReturn(null)
 
-        val result = petService.getPetById(petId, companyId)
-
-        assertNull(result)
+        assertThrows(NotFoundException::class.java) {
+            petService.getPetById(petId,companyId)
+        }
         verify(petDaoMock).getPetById(petId, companyId)
     }
 
@@ -75,7 +75,7 @@ class PetServiceTest {
 
         val result = petService.updatePetOwner(petId, ownerId, companyId)
 
-        assertEquals(1, result)
+        assertEquals(true, result)
         verify(petDaoMock).updatePetOwner(petId, ownerId, companyId)
     }
 

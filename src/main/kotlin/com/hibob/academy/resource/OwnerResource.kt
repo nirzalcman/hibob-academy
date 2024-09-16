@@ -49,5 +49,4 @@ class OwnerResource(private val ownerService: OwnerService) {
         return Response.ok(ownerService.getOwnerByPetId(companyId, petId)).build()
     }
 
-
 }

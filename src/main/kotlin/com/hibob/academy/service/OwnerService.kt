@@ -8,6 +8,7 @@ import jakarta.ws.rs.NotFoundException
 
 
 import org.springframework.stereotype.Component
+
 @Component
 class OwnerService(private val ownerDao: OwnerDao) {
 
@@ -20,30 +21,14 @@ class OwnerService(private val ownerDao: OwnerDao) {
 
     }
 
-    fun getOwnerById(id: Long, companyId: Long): Owner? {
-        return ownerDao.getOwnerById(id, companyId)
+    fun getOwnerById(id: Long, companyId: Long): Owner {
+        return ownerDao.getOwnerById(id, companyId) ?: throw NotFoundException("Owner Not Found")
     }
 
-    fun getOwnerByPetId(petId: Long, companyId: Long): Owner?{
-        val owner = ownerDao.getOwnerByPetId(petId, companyId)
-        when{
-            owner ==null -> throw NotFoundException("Pet Not Found")
-            owner.id ==null  -> throw NotFoundException("The pet dont has owner")
-            else -> return owner
-        }
-
+    fun getOwnerByPetId(petId: Long, companyId: Long): Owner {
+        return ownerDao.getOwnerByPetId(petId, companyId)
+            ?: throw NotFoundException("Pet Not Found Or the pet dont has owner ")
 
     }
-
-
-
-
-
-
-
-
-
-
-
 
 }

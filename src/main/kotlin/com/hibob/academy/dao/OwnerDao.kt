@@ -48,7 +48,7 @@ class OwnerDao(private val sql: DSLContext) {
         sql.select(table.id, table.name, table.companyId, table.employId)
             .from(table)
             .where(table.id.eq(id), table.companyId.eq(companyId))
-            .fetchOne(ownerMapper) ?: throw NotFoundException("Owner Not Found")
+            .fetchOne(ownerMapper)
 
 
     fun getOwnerByPetId(petId: Long, companyId: Long): Owner? =
