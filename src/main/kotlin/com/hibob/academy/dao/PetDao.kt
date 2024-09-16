@@ -1,5 +1,6 @@
 package com.hibob.academy.dao
 
+import jakarta.ws.rs.NotFoundException
 import org.jooq.DSLContext
 import org.jooq.Record
 import org.jooq.RecordMapper
@@ -65,7 +66,7 @@ class PetDao(private val sql: DSLContext) {
         sql.select(table.id, table.name, table.type, table.dateOfArrival, table.companyId, table.ownerId)
             .from(table)
             .where(table.id.eq(petId), table.companyId.eq(companyId))
-            .fetchOne(petMapper)
+            .fetchOne(petMapper)?: throw NotFoundException("Pet Not Found")
 
 
     fun updatePetOwner(petId: Long, ownerId: Long, companyId: Long): Int =

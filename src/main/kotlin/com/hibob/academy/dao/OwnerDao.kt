@@ -58,5 +58,4 @@ class OwnerDao(private val sql: DSLContext) {
             .on(petTable.ownerId.eq(table.id))
             .where(petTable.id.eq(petId), petTable.companyId.eq(companyId))
             .fetchOne(ownerMapper)
-
 }
