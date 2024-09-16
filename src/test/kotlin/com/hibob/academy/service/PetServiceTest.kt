@@ -11,7 +11,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import java.sql.Date
 import java.time.LocalDate
-import kotlin.random.Random
+
 
 class PetServiceTest {
     private val petDaoMock = mock<PetDao>()

@@ -25,5 +25,4 @@ class PetService(private val petDao: PetDao) {
         return if (petDao.updatePetOwner(petId, ownerId, companyId) > 0) 1 else throw NotFoundException("Pet Not Found")
 
     }
-
 }
