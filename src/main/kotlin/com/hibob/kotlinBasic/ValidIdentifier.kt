@@ -1,5 +1,5 @@
 package com.hibob.kotlinBasic
-
+/*
 fun main(args: Array<String>) {
 
     println("////////////////")
@@ -11,6 +11,8 @@ fun main(args: Array<String>) {
     println(isValidIdentifier("_12"))
 
 }
+*/
+
 
 fun isValidIdentifier(s: String): Boolean {
     if (s.isEmpty()) return false

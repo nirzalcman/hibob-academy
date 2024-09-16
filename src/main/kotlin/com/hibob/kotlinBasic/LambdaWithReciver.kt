@@ -8,7 +8,7 @@ import java.time.LocalDate
 3. Implement pretty print using buildString function
 4. Make SpidermanMovieProduceActions nullable (if not so yet) and make the relevant adjustments
 */
-
+/*
 fun main() {
     val movie: SpidermanMovieProduceActions = createGoodMovie()
     val runner = Runner(movie)
@@ -27,6 +27,8 @@ fun printSuccessMessage(success: Boolean) {
         println("The movie failed")
     }
 }
+*/
+
 
 interface SpidermanMovieProduceActions {
     fun signTobeyMaguire()

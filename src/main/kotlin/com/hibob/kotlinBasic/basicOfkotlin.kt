@@ -1,5 +1,5 @@
 package com.hibob.kotlinBasic
-
+/*
 fun main() {
     helloWorld()
     evenOrOdd(3)
@@ -19,7 +19,7 @@ fun main() {
     println(multiplication(a = 3, b = 2))
 
 }
-
+*/
 fun helloWorld() {
     println("Hello World!")
 }

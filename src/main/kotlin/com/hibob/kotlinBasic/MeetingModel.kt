@@ -49,6 +49,7 @@ class PersonalReview(
     }
 
 }
+/*
 fun main(args: Array<String>) {
 
 
@@ -66,5 +67,7 @@ val personalReview = PersonalReview(
 val newParticipant = Participant("Nir", "Nir@example.com")
 personalReview.addParticipant(newParticipant)
 }
+*/
+
 
 

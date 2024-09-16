@@ -32,11 +32,13 @@ data class Store(val day: DayOfWeek, val products: List<String>) {
     }
 
 }
-
+/*
 fun main() {
     val s = Store(DayOfWeek.SUNDAY, listOf("bla"))
     s.create()
 }
+*/
+
 
 
 
