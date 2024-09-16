@@ -47,7 +47,7 @@ class VaccineToPetTable(tableName: String) : JooqTable(tableName) {
     val vaccineDate = createDateField("vaccine_date")
 
     companion object {
-        val instance = VaccineToPetTable("vaccineToPet")
+        val instance = VaccineToPetTable("vaccine_to_pet")
     }
 
 }
