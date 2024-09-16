@@ -36,13 +36,13 @@ class PetResource(private val petService: PetService) {
 
     @GET
     @Path("/ownerId/{ownerId}")
-    fun getPetsByOwnerId( @PathParam("ownerId") ownerId: Long): Response {
+    fun getPetsByOwnerId(@PathParam("ownerId") ownerId: Long): Response {
         return Response.ok(petService.getPetsByOwner(ownerId)).build()
     }
 
     @GET
     @Path("/type")
-    fun countPetsByType() : Response {
+    fun countPetsByType(): Response {
         return Response.ok(petService.countPetsByType()).build()
     }
 
