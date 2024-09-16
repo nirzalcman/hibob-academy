@@ -9,8 +9,9 @@ fun List<Int>.sum(): Int {
 infix fun Number.toPowerOf(exponent: Number): Double {
     return Math.pow(this.toDouble(), exponent.toDouble())
 }
-
+/*
 fun main(args: Array<String>) {
     println(listOf(1, 2, 3, 4, 5).sum())
     println(5.5.toPowerOf(2))
 }
+*/
