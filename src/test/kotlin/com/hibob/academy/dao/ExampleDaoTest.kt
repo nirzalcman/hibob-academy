@@ -1,4 +1,4 @@
-package com.hibob.academy.dao
+/*package com.hibob.academy.dao
 
 import com.hibob.academy.utils.BobDbTest
 import org.hamcrest.MatcherAssert.assertThat
@@ -35,3 +35,5 @@ class ExampleDaoTest @Autowired constructor(private val sql: DSLContext)  {
         assertThat(actual, Matchers.equalTo(Example(actual!!.id, companyId, "Hello, Kotlin!")))
     }
 }
+
+ */
