@@ -83,14 +83,12 @@ class PetDao(private val sql: DSLContext) {
             .fetch(petMapper)
 
 
-
     fun adoptMultiplePetsByOwner(ownerId: Long, companyId: Long, petIds: List<Long>) =
         sql.update(table)
             .set(table.ownerId, ownerId)
             .where(table.id.`in`(petIds))
             .and(table.companyId.eq(companyId))
             .execute()
-
 
 
     fun addMultiplePets(petCreationRequests: List<PetCreationRequest>): IntArray {
@@ -104,7 +102,6 @@ class PetDao(private val sql: DSLContext) {
         }
         return batch.execute()
     }
-
 
 
 }

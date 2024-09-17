@@ -70,14 +70,17 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext) {
     }
 
     @Test
-    fun `validate pets retrieval by companyId`(){
-        val petId1 =dao.createPet(PetCreationRequest("dog1", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId))
+    fun `validate pets retrieval by companyId`() {
+        val petId1 = dao.createPet(PetCreationRequest("dog1", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId))
         val petId2 = dao.createPet(PetCreationRequest("cat1", "Cat", Date.valueOf(LocalDate.now()), companyId, ownerId))
         val petId3 = dao.createPet(PetCreationRequest("cat2", "Cat", Date.valueOf(LocalDate.now()), 50000L, ownerId))
 
-        val actualPets =dao.getPetsByCompanyId(companyId)
-        val expectedPets= listOf(Pet(petId1,"dog1", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId),Pet(petId2,"cat1", "Cat", Date.valueOf(LocalDate.now()), companyId, ownerId))
-        assertEquals(expectedPets,actualPets)
+        val actualPets = dao.getPetsByCompanyId(companyId)
+        val expectedPets = listOf(
+            Pet(petId1, "dog1", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId),
+            Pet(petId2, "cat1", "Cat", Date.valueOf(LocalDate.now()), companyId, ownerId)
+        )
+        assertEquals(expectedPets, actualPets)
     }
 
 
@@ -107,6 +110,7 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext) {
         assertEquals(3L, pet1?.ownerId)
         assertEquals(2L, pet2?.ownerId)
     }
+
     @Test
     fun `validate multiple pets are added successfully`() {
         val petCreationRequests = listOf(
