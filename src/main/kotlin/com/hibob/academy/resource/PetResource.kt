@@ -9,25 +9,24 @@ import jakarta.ws.rs.core.Response
 import org.springframework.stereotype.Component
 
 @Component
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 @Path("/api/pets")
 class PetResource(private val petService: PetService) {
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/{companyId}/type/{type}")
     fun getPetsByType(@PathParam("companyId") companyId: Long, @PathParam("type") type: String): Response {
         return Response.ok(petService.getPetsByType(type, companyId)).build()
     }
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/{companyId}/{id}")
     fun getPetById(@PathParam("companyId") companyId: Long, @PathParam("id") id: Long): Response {
         return Response.ok(petService.getPetById(id, companyId)).build()
     }
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
     fun createPet(petCreationRequest: PetCreationRequest): Response {
         return Response.ok(petService.createPet(petCreationRequest)).build()
     }

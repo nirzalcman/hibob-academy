@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component
 
 
 @Component
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 @Path("/api/owners")
 class OwnerResource(private val ownerService: OwnerService) {
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     fun createOwner(ownerRequest: OwnerCreationRequest): Response {
         val ownerId = ownerService.createOwner(ownerRequest)
         return Response.status(Response.Status.CREATED).entity("Owner created successfully with ID: $ownerId").build()
@@ -24,8 +24,6 @@ class OwnerResource(private val ownerService: OwnerService) {
 
 
     @GET
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/{companyId}")
     fun getOwners(@PathParam("companyId") companyId: Long): Response {
         val owners = ownerService.getOwners(companyId)
@@ -34,16 +32,12 @@ class OwnerResource(private val ownerService: OwnerService) {
     }
 
     @GET
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("{companyId}/{id}")
     fun getOwnerById(@PathParam("companyId") companyId: Long, @PathParam("id") id: Long): Response {
         return Response.ok(ownerService.getOwnerById(id, companyId)).build()
     }
 
-    // need to check the two other options - there is and owner is null
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/{companyId}/{petId}")
     fun getOwnerByPetID(@PathParam("companyId") companyId: Long, @PathParam("petId") petId: Long): Response {
         return Response.ok(ownerService.getOwnerByPetId(companyId, petId)).build()
