@@ -1,5 +1,6 @@
 package com.hibob.academy.dao
 
+import jakarta.ws.rs.NotFoundException
 import org.jooq.DSLContext
 import org.jooq.Record
 import org.jooq.RecordMapper

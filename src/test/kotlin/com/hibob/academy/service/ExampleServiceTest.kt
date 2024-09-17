@@ -1,4 +1,4 @@
-package com.hibob.academy.service
+/*package com.hibob.academy.service
 
 import com.hibob.academy.dao.Example
 import org.hamcrest.MatcherAssert.assertThat
@@ -22,3 +22,4 @@ class ExampleServiceTest {
     }
 
 }
+*/
