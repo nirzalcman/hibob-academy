@@ -34,5 +34,6 @@ internal class ExampleResourceTest {
         assertThat(response.body, `is`(ExampleResponse(example)))
     }
 }
+*/
 
- */
+
