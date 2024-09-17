@@ -26,6 +26,13 @@ class PetResource(private val petService: PetService) {
         return Response.ok(petService.getPetById(id, companyId)).build()
     }
 
+    @GET
+    @Path("/{companyId}")
+    fun getPetByCompanyId(@PathParam("companyId") companyId:Long): Response {
+        return Response.ok(petService.getPetsByCompanyId(companyId)).build()
+    }
+
+
     @POST
     fun createPet(petCreationRequest: PetCreationRequest): Response {
         return Response.ok(petService.createPet(petCreationRequest)).build()
@@ -39,6 +46,20 @@ class PetResource(private val petService: PetService) {
         @PathParam("ownerId") ownerId: Long
     ): Response {
         return Response.ok(petService.updatePetOwner(id, ownerId, companyId)).build()
+    }
+
+    @POST
+    @Path("/{companyId}/ownerId/{ownerId}/petIds")
+    fun adoptMultiplePetsByOwner(@PathParam("companyId") companyId: Long,@PathParam("ownerId") ownerId: Long, petIds: List<Long>): Response {
+        petService.adoptMultiplePetsByOwner(ownerId, companyId, petIds)
+        return Response.ok().build()
+    }
+
+    @POST
+    @Path("/addMultiple")
+    fun addMultiplePets(petCreationRequests: List<PetCreationRequest>): Response {
+        petService.addMultiplePets(petCreationRequests)
+        return Response.ok().build()
     }
 
 }

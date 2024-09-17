@@ -91,4 +91,40 @@ class PetServiceTest {
         }
         verify(petDaoMock).updatePetOwner(petId, ownerId, companyId)
     }
+
+    @Test
+    fun `test getPetsByCompanyId returns list of pets`() {
+        val companyId = 1L
+        val expectedPets = listOf(Pet(1L, "Tom", "Dog", Date.valueOf(LocalDate.now()), companyId, 10L))
+        whenever(petDaoMock.getPetsByCompanyId(companyId)).thenReturn(expectedPets)
+
+        val result = petService.getPetsByCompanyId(companyId)
+
+        assertEquals(expectedPets, result)
+        verify(petDaoMock).getPetsByCompanyId(companyId)
+    }
+
+    @Test
+    fun `test adoptMultiplePetsByOwner should call dao`() {
+        val ownerId = 1L
+        val companyId = 1L
+        val petIds = listOf(1L, 2L, 3L)
+
+        petService.adoptMultiplePetsByOwner(ownerId, companyId, petIds)
+
+        verify(petDaoMock).adoptMultiplePetsByOwner(ownerId, companyId, petIds)
+    }
+
+    @Test
+    fun `test addMultiplePets should call dao`() {
+        val petCreationRequests = listOf(
+            PetCreationRequest("Tom", "Dog", Date.valueOf(LocalDate.now()), 1L, 10L),
+            PetCreationRequest("Jerry", "Cat", Date.valueOf(LocalDate.now()), 1L, 10L)
+        )
+
+        petService.addMultiplePets(petCreationRequests)
+
+        verify(petDaoMock).addMultiplePets(petCreationRequests)
+    }
+
 }
