@@ -99,15 +99,20 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext) {
 
 
     @Test
-    fun `validate that updating multiple pets by owner ,not update the ownerId of the pets that  has ids does not in the list  `() {
+    fun `validate multiple pet adoption updates only relevant pets  `() {
         val petId1 = dao.createPet(PetCreationRequest("Tomtom", "Dog", Date.valueOf(LocalDate.now()), companyId, 1L))
         val petId2 = dao.createPet(PetCreationRequest("Caticat", "Cat", Date.valueOf(LocalDate.now()), companyId, 2L))
+        val petId3 = dao.createPet(PetCreationRequest("Dogidog", "Cat", Date.valueOf(LocalDate.now()), companyId, 2L))
 
-        dao.adoptMultiplePetsByOwner(3L, companyId, listOf(petId1))
+
+        dao.adoptMultiplePetsByOwner(3L, companyId, listOf(petId1,petId3))
 
         val pet1 = dao.getPetById(petId1, companyId)
         val pet2 = dao.getPetById(petId2, companyId)
+        val pet3 = dao.getPetById(petId3, companyId)
+
         assertEquals(3L, pet1?.ownerId)
+        assertEquals(3L,pet3?.ownerId)
         assertEquals(2L, pet2?.ownerId)
     }
 
