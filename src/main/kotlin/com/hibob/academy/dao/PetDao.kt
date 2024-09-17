@@ -76,6 +76,37 @@ class PetDao(private val sql: DSLContext) {
             .execute()
 
 
+    fun getPetsByCompanyId(companyId: Long): List<Pet> =
+        sql.select(table.id, table.name, table.type, table.dateOfArrival, table.companyId, table.ownerId)
+            .from(table)
+            .where(table.companyId.eq(companyId))
+            .fetch(petMapper)
+
+
+
+    fun adoptMultiplePetsByOwner(ownerId: Long, companyId: Long, petIds: List<Long>) =
+        sql.update(table)
+            .set(table.ownerId, ownerId)
+            .where(table.id.`in`(petIds))
+            .and(table.companyId.eq(companyId))
+            .execute()
+
+
+
+    fun addMultiplePets(petCreationRequests: List<PetCreationRequest>): IntArray {
+        val insert = sql.insertInto(table)
+            .columns(table.name, table.type, table.companyId, table.ownerId)
+            .values(DSL.param(table.name), DSL.param(table.type), DSL.param(table.companyId), DSL.param(table.ownerId))
+
+        val batch = sql.batch(insert)
+        petCreationRequests.forEach {
+            batch.bind(it.name, it.type, it.companyId, it.ownerId)
+        }
+        return batch.execute()
+    }
+
+
+
 }
 
 

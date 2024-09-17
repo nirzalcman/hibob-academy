@@ -69,6 +69,66 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext) {
         assertEquals(0, res)
     }
 
+    @Test
+    fun `validate pets retrieval by companyId`(){
+        val petId1 =dao.createPet(PetCreationRequest("dog1", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId))
+        val petId2 = dao.createPet(PetCreationRequest("cat1", "Cat", Date.valueOf(LocalDate.now()), companyId, ownerId))
+        val petId3 = dao.createPet(PetCreationRequest("cat2", "Cat", Date.valueOf(LocalDate.now()), 50000L, ownerId))
+
+        val actualPets =dao.getPetsByCompanyId(companyId)
+        val expectedPets= listOf(Pet(petId1,"dog1", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId),Pet(petId2,"cat1", "Cat", Date.valueOf(LocalDate.now()), companyId, ownerId))
+        assertEquals(expectedPets,actualPets)
+    }
+
+
+    @Test
+    fun `validate that updating multiple pets by owner update the ownerId of the pets`() {
+        val petId1 = dao.createPet(PetCreationRequest("Tomtom", "Dog", Date.valueOf(LocalDate.now()), companyId, 1L))
+        val petId2 = dao.createPet(PetCreationRequest("Caticat", "Cat", Date.valueOf(LocalDate.now()), companyId, 2L))
+
+        dao.adoptMultiplePetsByOwner(3L, companyId, listOf(petId1, petId2))
+
+        val pet1 = dao.getPetById(petId1, companyId)
+        val pet2 = dao.getPetById(petId2, companyId)
+        assertEquals(3L, pet1?.ownerId)
+        assertEquals(3L, pet2?.ownerId)
+    }
+
+
+    @Test
+    fun `validate that updating multiple pets by owner ,not update the ownerId of the pets that  has ids does not in the list  `() {
+        val petId1 = dao.createPet(PetCreationRequest("Tomtom", "Dog", Date.valueOf(LocalDate.now()), companyId, 1L))
+        val petId2 = dao.createPet(PetCreationRequest("Caticat", "Cat", Date.valueOf(LocalDate.now()), companyId, 2L))
+
+        dao.adoptMultiplePetsByOwner(3L, companyId, listOf(petId1))
+
+        val pet1 = dao.getPetById(petId1, companyId)
+        val pet2 = dao.getPetById(petId2, companyId)
+        assertEquals(3L, pet1?.ownerId)
+        assertEquals(2L, pet2?.ownerId)
+    }
+    @Test
+    fun `validate multiple pets are added successfully`() {
+        val petCreationRequests = listOf(
+            PetCreationRequest("dog1", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId),
+            PetCreationRequest("cat1", "Cat", Date.valueOf(LocalDate.now()), companyId, ownerId),
+            PetCreationRequest("snake1", "Snake", Date.valueOf(LocalDate.now()), companyId, ownerId)
+        )
+        dao.addMultiplePets(petCreationRequests)
+
+        val actualPets = dao.getPetsByCompanyId(companyId)
+
+        petCreationRequests.forEachIndexed { index, petRequest ->
+            val actualPet = actualPets[index]
+
+            assertEquals(petRequest.name, actualPet.name)
+            assertEquals(petRequest.type, actualPet.type)
+            assertEquals(petRequest.dateOfArivval, actualPet.dateOfArivval)
+            assertEquals(petRequest.companyId, actualPet.companyId)
+            assertEquals(petRequest.ownerId, actualPet.ownerId)
+        }
+    }
+
 
 }
 
