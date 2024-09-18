@@ -18,12 +18,14 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext) {
     private val table = PetTable.instance
     private val dao = PetDao(sql)
     private val companyId = Random.nextLong()
+    private val companyId2 = 50000L
     private val ownerId = Random.nextLong()
 
     @BeforeEach
     @AfterEach
     fun cleanup() {
         sql.deleteFrom(table).where(table.companyId.eq(companyId)).execute()
+        sql.deleteFrom(table).where(table.companyId.eq(companyId2)).execute()
         sql.deleteFrom(ownerTable).where(ownerTable.companyId.eq(companyId)).execute()
     }
 
@@ -104,6 +106,7 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext) {
     fun `validate pets retrieval by companyId`() {
         val petId1 = dao.createPet(PetCreationRequest("dog1", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId))
         val petId2 = dao.createPet(PetCreationRequest("cat1", "Cat", Date.valueOf(LocalDate.now()), companyId, ownerId))
+        val petId3 = dao.createPet(PetCreationRequest("cat2", "Cat", Date.valueOf(LocalDate.now()), companyId2, ownerId))
 
         val actualPets = dao.getPetsByCompanyId(companyId)
         val expectedPets = listOf(
@@ -111,6 +114,7 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext) {
             Pet(petId2, "cat1", "Cat", Date.valueOf(LocalDate.now()), companyId, ownerId)
         )
         assertEquals(expectedPets, actualPets)
+
     }
 
 
