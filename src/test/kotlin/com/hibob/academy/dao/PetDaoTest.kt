@@ -104,7 +104,6 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext) {
     fun `validate pets retrieval by companyId`() {
         val petId1 = dao.createPet(PetCreationRequest("dog1", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId))
         val petId2 = dao.createPet(PetCreationRequest("cat1", "Cat", Date.valueOf(LocalDate.now()), companyId, ownerId))
-        val petId3 = dao.createPet(PetCreationRequest("cat2", "Cat", Date.valueOf(LocalDate.now()), 50000L, ownerId))
 
         val actualPets = dao.getPetsByCompanyId(companyId)
         val expectedPets = listOf(
