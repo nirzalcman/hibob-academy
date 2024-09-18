@@ -7,6 +7,7 @@ import jakarta.ws.rs.*
 import jakarta.ws.rs.core.MediaType
 import jakarta.ws.rs.core.Response
 import org.springframework.stereotype.Component
+import org.springframework.web.bind.annotation.RequestBody
 
 @Component
 @Consumes(MediaType.APPLICATION_JSON)
@@ -34,7 +35,7 @@ class PetResource(private val petService: PetService) {
 
 
     @POST
-    fun createPet(petCreationRequest: PetCreationRequest): Response {
+    fun createPet(@RequestBody petCreationRequest: PetCreationRequest): Response {
         return Response.ok(petService.createPet(petCreationRequest)).build()
     }
 
@@ -49,15 +50,15 @@ class PetResource(private val petService: PetService) {
     }
 
     @POST
-    @Path("/{companyId}/ownerId/{ownerId}/petIds")
-    fun adoptMultiplePetsByOwner(@PathParam("companyId") companyId: Long,@PathParam("ownerId") ownerId: Long, petIds: List<Long>): Response {
+    @Path("/{companyId}/ownerId/{ownerId}/adoptPets")
+    fun adoptMultiplePetsByOwner(@PathParam("companyId") companyId: Long,@PathParam("ownerId") ownerId: Long, @RequestBody petIds: List<Long>): Response {
         petService.adoptMultiplePetsByOwner(ownerId, companyId, petIds)
         return Response.ok().build()
     }
 
     @POST
     @Path("/addMultiple")
-    fun addMultiplePets(petCreationRequests: List<PetCreationRequest>): Response {
+    fun addMultiplePets(@RequestBody petCreationRequests: List<PetCreationRequest>): Response {
         petService.addMultiplePets(petCreationRequests)
         return Response.ok().build()
     }
