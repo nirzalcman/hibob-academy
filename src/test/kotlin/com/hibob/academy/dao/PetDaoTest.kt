@@ -18,12 +18,13 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext) {
     private val table = PetTable.instance
     private val dao = PetDao(sql)
     private val companyId = Random.nextLong()
+    private val companyId2 = 50000L
     private val ownerId = Random.nextLong()
 
     @BeforeEach
     @AfterEach
     fun cleanup() {
-        sql.deleteFrom(table).where(table.companyId.eq(companyId)).execute()
+        dao.deleteByCompanyIds(listOf(companyId,companyId2))
         sql.deleteFrom(ownerTable).where(ownerTable.companyId.eq(companyId)).execute()
     }
 
@@ -104,7 +105,7 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext) {
     fun `validate pets retrieval by companyId`() {
         val petId1 = dao.createPet(PetCreationRequest("dog1", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId))
         val petId2 = dao.createPet(PetCreationRequest("cat1", "Cat", Date.valueOf(LocalDate.now()), companyId, ownerId))
-        val petId3 = dao.createPet(PetCreationRequest("cat2", "Cat", Date.valueOf(LocalDate.now()), 50000L, ownerId))
+        val petId3 = dao.createPet(PetCreationRequest("cat2", "Cat", Date.valueOf(LocalDate.now()), companyId2, ownerId))
 
         val actualPets = dao.getPetsByCompanyId(companyId)
         val expectedPets = listOf(
@@ -112,6 +113,7 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext) {
             Pet(petId2, "cat1", "Cat", Date.valueOf(LocalDate.now()), companyId, ownerId)
         )
         assertEquals(expectedPets, actualPets)
+
     }
 
 
@@ -168,6 +170,25 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext) {
             assertEquals(petRequest.ownerId, actualPet.ownerId)
         }
     }
+
+    @Test
+    fun `validate deleteByCompanyIds deletes all pets for given companyIds`() {
+        val petId1 = dao.createPet(PetCreationRequest("dog1", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId))
+        val petId2 = dao.createPet(PetCreationRequest("cat1", "Cat", Date.valueOf(LocalDate.now()), companyId2, ownerId))
+
+        dao.deleteByCompanyIds(listOf(companyId))
+
+        val petsForCompanyId1 = dao.getPetsByCompanyId(companyId)
+        val petsForCompanyId2 = dao.getPetsByCompanyId(companyId2)
+
+        assertTrue(petsForCompanyId1.isEmpty())
+        assertEquals(listOf( Pet(petId2,"cat1", "Cat", Date.valueOf(LocalDate.now()), companyId2, ownerId)),petsForCompanyId2)
+    }
+
+
+
+
+
 
 
 }

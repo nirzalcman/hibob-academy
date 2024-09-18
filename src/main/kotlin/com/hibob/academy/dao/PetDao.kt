@@ -117,6 +117,12 @@ class PetDao(private val sql: DSLContext) {
         return batch.execute()
     }
 
+    fun deleteByCompanyIds(companyIds: List<Long>) {
+        sql.deleteFrom(PetTable.instance)
+            .where(table.companyId.`in`(companyIds))
+            .execute()
+    }
+
 
 }
 
