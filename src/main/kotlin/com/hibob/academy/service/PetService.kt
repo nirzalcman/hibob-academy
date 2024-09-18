@@ -26,4 +26,15 @@ class PetService(private val petDao: PetDao) {
         return if (petDao.updatePetOwner(petId, ownerId, companyId) > 0) true else throw NotFoundException("Pet Not Found")
 
     }
+    fun getPetsByCompanyId(companyId: Long): List<Pet> {
+        return petDao.getPetsByCompanyId(companyId)
+    }
+
+    fun adoptMultiplePetsByOwner(ownerId: Long, companyId: Long, petIds: List<Long>) {
+        petDao.adoptMultiplePetsByOwner(ownerId,companyId,petIds)
+    }
+
+    fun addMultiplePets(petCreationRequests: List<PetCreationRequest>) {
+        petDao.addMultiplePets(petCreationRequests)
+    }
 }
