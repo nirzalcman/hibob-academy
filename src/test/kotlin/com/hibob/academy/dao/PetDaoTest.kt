@@ -24,8 +24,7 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext) {
     @BeforeEach
     @AfterEach
     fun cleanup() {
-        sql.deleteFrom(table).where(table.companyId.eq(companyId)).execute()
-        sql.deleteFrom(table).where(table.companyId.eq(companyId2)).execute()
+        dao.deleteByCompanyIds(listOf(companyId,companyId2))
         sql.deleteFrom(ownerTable).where(ownerTable.companyId.eq(companyId)).execute()
     }
 
@@ -171,6 +170,25 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext) {
             assertEquals(petRequest.ownerId, actualPet.ownerId)
         }
     }
+
+    @Test
+    fun `validate deleteByCompanyIds deletes all pets for given companyIds`() {
+        val petId1 = dao.createPet(PetCreationRequest("dog1", "Dog", Date.valueOf(LocalDate.now()), companyId, ownerId))
+        val petId2 = dao.createPet(PetCreationRequest("cat1", "Cat", Date.valueOf(LocalDate.now()), companyId2, ownerId))
+
+        dao.deleteByCompanyIds(listOf(companyId))
+
+        val petsForCompanyId1 = dao.getPetsByCompanyId(companyId)
+        val petsForCompanyId2 = dao.getPetsByCompanyId(companyId2)
+
+        assertTrue(petsForCompanyId1.isEmpty())
+        assertEquals(listOf( Pet(petId2,"cat1", "Cat", Date.valueOf(LocalDate.now()), companyId2, ownerId)),petsForCompanyId2)
+    }
+
+
+
+
+
 
 
 }
