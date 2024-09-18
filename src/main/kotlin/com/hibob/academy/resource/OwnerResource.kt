@@ -37,6 +37,7 @@ class OwnerResource {
 
 
     @PUT
+    @Path("/update")
     @Consumes(MediaType.APPLICATION_JSON)
     fun updateOwner(@RequestBody owner: Owner): Response {
         val updateOwner = if (owner.firstName.isNullOrEmpty() && owner.lastName.isNullOrEmpty()) {
