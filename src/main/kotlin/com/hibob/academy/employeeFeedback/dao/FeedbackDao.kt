@@ -33,8 +33,6 @@ class FeedbackDao(private val sql: DSLContext) {
             .set(feedBackTable.employeeId, employeeId)
             .set(feedBackTable.content, feedback.content)
             .set(feedBackTable.isAnonymous, feedback.isAnonymous)
-            .set(feedBackTable.status, feedback.status.toString())
-            .set(feedBackTable.lastModifiedStatus, Date.valueOf(LocalDate.now()))
             .returningResult(feedBackTable.id)
             .fetchOne()!!
             .get(feedBackTable.id)

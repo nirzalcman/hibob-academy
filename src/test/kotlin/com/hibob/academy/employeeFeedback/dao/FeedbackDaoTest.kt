@@ -20,14 +20,12 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
     private val userLoggedInDetails = UserLoggedInDetails(employeeId, companyId, Role.EMPLOYEE)
     private val date = Date.valueOf(LocalDate.now())
 
-    private val feedback1 = CreationFeedback(
-        content = "Test Feedback",
-        isAnonymous = false,
-        status = Status.UNREVIEWED)
+    private val feedback1 = CreationFeedback(content = "Test Feedback", isAnonymous = false)
 
-    private val feedback2 = CreationFeedback(content = "Feedback 2",
-        isAnonymous = true,
-        status = Status.REVIEWED)
+
+
+    private val feedback2 = CreationFeedback(content = "Feedback 2",isAnonymous = true)
+
 
     @BeforeEach
     @AfterEach
@@ -41,7 +39,7 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
 
         val feedbackId = feedbackDao.createFeedback(feedback1, userLoggedInDetails)
         val actualFeedback = feedbackDao.getFeedbackById(feedbackId, userLoggedInDetails)
-        val expectedFeedback = Feedback(feedbackId, userLoggedInDetails.employeeId, feedback1.content, feedback1.isAnonymous, date, feedback1.status, date)
+        val expectedFeedback = Feedback(feedbackId, userLoggedInDetails.employeeId, feedback1.content, feedback1.isAnonymous, date, Status.UNREVIEWED, null)
 
         assertEquals(expectedFeedback, actualFeedback)
     }
@@ -51,7 +49,7 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
 
         val feedbackId = feedbackDao.createFeedback(feedback2, userLoggedInDetails)
         val actualFeedback = feedbackDao.getFeedbackById(feedbackId, userLoggedInDetails)
-        val expectedFeedback = Feedback(feedbackId, null, feedback2.content, feedback2.isAnonymous, date, feedback2.status, date)
+        val expectedFeedback = Feedback(feedbackId, null, feedback2.content, feedback2.isAnonymous, date, Status.UNREVIEWED, null)
 
         assertEquals(expectedFeedback, actualFeedback)
     }
@@ -64,8 +62,8 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
         val feedbackId1 = feedbackDao.createFeedback(feedback1, userLoggedInDetails)
         val feedbackId2 = feedbackDao.createFeedback(feedback2, userLoggedInDetails)
 
-        val expectedFeedback1 = Feedback(feedbackId1, userLoggedInDetails.employeeId, feedback1.content, feedback1.isAnonymous, date, feedback1.status, date)
-        val expectedFeedback2 = Feedback(feedbackId2, null, feedback2.content, feedback2.isAnonymous, date, feedback2.status, date)
+        val expectedFeedback1 = Feedback(feedbackId1, userLoggedInDetails.employeeId, feedback1.content, feedback1.isAnonymous, date, Status.UNREVIEWED, null)
+        val expectedFeedback2 = Feedback(feedbackId2, null, feedback2.content, feedback2.isAnonymous, date, Status.UNREVIEWED, null)
         val actualFeedbacks = feedbackDao.getAllFeedbacks(userLoggedInDetails)
 
         assertEquals(2, actualFeedbacks.size)
@@ -79,7 +77,7 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
 
         val feedbackId = feedbackDao.createFeedback(feedback1, userLoggedInDetails)
         val actualFeedback = feedbackDao.getFeedbackById(feedbackId, userLoggedInDetails)
-        val expectedFeedback = Feedback(feedbackId, userLoggedInDetails.employeeId, feedback1.content, feedback1.isAnonymous, date, feedback1.status, date)
+        val expectedFeedback = Feedback(feedbackId, userLoggedInDetails.employeeId, feedback1.content, feedback1.isAnonymous, date, Status.UNREVIEWED, null)
 
         assertEquals(expectedFeedback, actualFeedback)
     }

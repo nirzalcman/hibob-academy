@@ -23,7 +23,6 @@ data class  UserLoggedInDetails(
 data class CreationFeedback(
     val content: String,
     val isAnonymous: Boolean,
-    val status: Status,
 )
 
 data class FeedbackFilter(
@@ -40,7 +39,7 @@ data class Feedback(
     val isAnonymous: Boolean,
     val timeSubmitted: Date,
     val status: Status,
-    val lastModifiedStatus: Date
+    val lastModifiedStatus: Date?
 )
 
 data class CreationResponse (
