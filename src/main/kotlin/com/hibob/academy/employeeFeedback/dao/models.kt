@@ -3,7 +3,7 @@ package com.hibob.academy.employeeFeedback.dao
 import java.sql.Date
 
 enum class Role {
-    HR,ADMIN,EMPLOYEE
+    HR, ADMIN, EMPLOYEE
 }
 
 enum class Department {
@@ -11,10 +11,22 @@ enum class Department {
 }
 
 enum class Status {
-    REVIEWED,UNREVIEWED
+    REVIEWED, UNREVIEWED
 }
 
-data class  UserLoggedInDetails(
+data class CreationEmployee(
+    val firstName: String,
+    val lastName: String,
+    val role: Role,
+    val department: Department,
+)
+
+data class UserLoggedInDetails(
+    val employeeId: Long,
+    val companyId: Long,
+)
+
+data class UserLoggedInDetailsWithRole(
     val employeeId: Long,
     val companyId: Long,
     val role : Role
@@ -42,33 +54,16 @@ data class Feedback(
     val lastModifiedStatus: Date?
 )
 
-data class CreationResponse (
-    val id: Long,
+data class CreationResponse(
+    val feedbackId: Long,
     val content: String
 )
 
-data class Response (
+data class Response(
     val id: Long,
     val feedbackId: Long,
     val content: String,
     val timeSubmitted: Date,
-    val responseBy : Long
+    val responseBy: Long
 )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
