@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 class EmployeeDao(private val sql: DSLContext) {
     private val employeeTable = EmployeeTable.instance
 
-    fun createEmployee(creationEmployee: CreationEmployee, userLoggedInDetails: UserLoggedInDetails): Long =
+    fun createEmployee(userLoggedInDetails: UserLoggedInDetails, creationEmployee: CreationEmployee): Long =
         sql.insertInto(employeeTable)
             .set(employeeTable.companyId, userLoggedInDetails.companyId)
             .set(employeeTable.firstName, creationEmployee.firstName)
@@ -19,6 +19,5 @@ class EmployeeDao(private val sql: DSLContext) {
             .returning(employeeTable.id)
             .fetchOne()!!
             .get(employeeTable.id)
-
 
 }
