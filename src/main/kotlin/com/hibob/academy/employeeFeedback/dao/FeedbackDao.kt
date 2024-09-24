@@ -26,7 +26,7 @@ class FeedbackDao(private val sql: DSLContext) {
 
     }
 
-    fun createFeedback(feedback: CreationFeedback, userLoggedInDetails: UserLoggedInDetails): Long {
+    fun createFeedback(userLoggedInDetails: UserLoggedInDetails,feedback: CreationFeedback): Long {
         val employeeId = if (feedback.isAnonymous) null else userLoggedInDetails.employeeId
 
         return sql.insertInto(feedBackTable)
@@ -55,7 +55,7 @@ class FeedbackDao(private val sql: DSLContext) {
             .fetch(feedBackMapper)
 
 
-    fun getFeedbackById(feedBackId: Long, companyId: Long): Feedback? =
+    fun getFeedbackById(companyId: Long,feedBackId: Long): Feedback? =
         sql.select(
             feedBackTable.id,
             feedBackTable.employeeId,
@@ -70,7 +70,7 @@ class FeedbackDao(private val sql: DSLContext) {
             .fetchOne(feedBackMapper)
 
 
-    fun searchFeedbacks(filter: FeedbackFilter, companyId: Long): List<Feedback> {
+    fun searchFeedbacks( companyId: Long,filter: FeedbackFilter): List<Feedback> {
 
         return sql.select(
             feedBackTable.id,
@@ -104,15 +104,15 @@ class FeedbackDao(private val sql: DSLContext) {
             .fetch(feedBackMapper)
     }
 
-    fun updateStatus(status: Status, feedbackId: Long, userLoggedInDetails: UserLoggedInDetails): Int =
+    fun updateStatus(status: Status, feedbackId: Long, companyId: Long): Int =
         sql.update(feedBackTable)
             .set(feedBackTable.status, status.toString())
             .where(feedBackTable.id.eq(feedbackId))
-            .and(feedBackTable.companyId.eq(userLoggedInDetails.companyId))
+            .and(feedBackTable.companyId.eq(companyId))
             .execute()
 
 
-    fun getStatus(feedbackId: Long, userLoggedInDetails: UserLoggedInDetails): String? {
+    fun getStatus(userLoggedInDetails: UserLoggedInDetails,feedbackId: Long): String? {
         return sql.select(feedBackTable.status)
             .from(feedBackTable)
             .where(feedBackTable.id.eq(feedbackId))

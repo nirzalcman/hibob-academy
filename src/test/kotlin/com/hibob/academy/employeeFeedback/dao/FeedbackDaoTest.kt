@@ -39,8 +39,8 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
     @Test
     fun `create not anonymous feedback successfully`() {
 
-        val feedbackId = feedbackDao.createFeedback(feedback1, userLoggedInDetails)
-        val actualFeedback = feedbackDao.getFeedbackById(feedbackId, companyId)
+        val feedbackId = feedbackDao.createFeedback(userLoggedInDetails,feedback1)
+        val actualFeedback = feedbackDao.getFeedbackById(companyId,feedbackId)
         val expectedFeedback = Feedback(
             feedbackId,
             userLoggedInDetails.employeeId,
@@ -57,8 +57,8 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
     @Test
     fun `create anonymous feedback successfully`() {
 
-        val feedbackId = feedbackDao.createFeedback(feedback2, userLoggedInDetails)
-        val actualFeedback = feedbackDao.getFeedbackById(feedbackId, companyId)
+        val feedbackId = feedbackDao.createFeedback(userLoggedInDetails,feedback2)
+        val actualFeedback = feedbackDao.getFeedbackById(companyId,feedbackId)
         val expectedFeedback =
             Feedback(feedbackId, null, feedback2.content, feedback2.isAnonymous, date, Status.UNREVIEWED, null)
 
@@ -70,8 +70,8 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
     fun `get all feedbacks for company`() {
 
 
-        val feedbackId1 = feedbackDao.createFeedback(feedback1, userLoggedInDetails)
-        val feedbackId2 = feedbackDao.createFeedback(feedback2, userLoggedInDetails)
+        val feedbackId1 = feedbackDao.createFeedback(userLoggedInDetails,feedback1)
+        val feedbackId2 = feedbackDao.createFeedback(userLoggedInDetails,feedback2)
 
         val expectedFeedback1 = Feedback(
             feedbackId1,
@@ -95,8 +95,8 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
     @Test
     fun `get feedback by id`() {
 
-        val feedbackId = feedbackDao.createFeedback(feedback1, userLoggedInDetails)
-        val actualFeedback = feedbackDao.getFeedbackById(feedbackId, companyId)
+        val feedbackId = feedbackDao.createFeedback(userLoggedInDetails,feedback1)
+        val actualFeedback = feedbackDao.getFeedbackById(companyId,feedbackId)
         val expectedFeedback = Feedback(
             feedbackId,
             userLoggedInDetails.employeeId,
@@ -113,10 +113,10 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
     @Test
     fun `search feedbacks by is anonymous`() {
 
-        val feedBackId1 = feedbackDao.createFeedback(feedback1, userLoggedInDetails)
+        val feedBackId1 = feedbackDao.createFeedback(userLoggedInDetails,feedback1)
 
         val anonymousFilter = FeedbackFilter(isAnonymous = false)
-        val actualAnonymousFeedbacks = feedbackDao.searchFeedbacks(anonymousFilter, companyId)
+        val actualAnonymousFeedbacks = feedbackDao.searchFeedbacks(companyId,anonymousFilter)
         val expectedFeedbacks = listOf(
             Feedback(
                 feedBackId1,
@@ -136,13 +136,13 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
     @Test
     fun `search feedbacks by after date and is anonymous`() {
 
-        val feedbackId1 = feedbackDao.createFeedback(feedback1, userLoggedInDetails)
-        val feedbackId2 = feedbackDao.createFeedback(feedback2, userLoggedInDetails)
+        val feedbackId1 = feedbackDao.createFeedback(userLoggedInDetails,feedback1)
+        val feedbackId2 = feedbackDao.createFeedback(userLoggedInDetails,feedback2)
 
         val dateForFilter = LocalDate.now().minusDays(3).toString()
         val filter = FeedbackFilter(afterDate = dateForFilter, isAnonymous = true)
 
-        val actualFeedbacks = feedbackDao.searchFeedbacks(filter, companyId)
+        val actualFeedbacks = feedbackDao.searchFeedbacks(companyId,filter)
         val expectedFeedbacks =
             listOf(Feedback(feedbackId2, null, feedback2.content, feedback2.isAnonymous, date, Status.UNREVIEWED, null))
 
@@ -152,12 +152,12 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
     @Test
     fun `search feedbacks by before date - return empty`() {
 
-        val feedbackId1 = feedbackDao.createFeedback(feedback1, userLoggedInDetails)
-        val feedbackId2 = feedbackDao.createFeedback(feedback2, userLoggedInDetails)
+        val feedbackId1 = feedbackDao.createFeedback(userLoggedInDetails,feedback1)
+        val feedbackId2 = feedbackDao.createFeedback(userLoggedInDetails,feedback2)
 
         val dateForFilter = LocalDate.now().minusDays(3).toString()
         val filter = FeedbackFilter(beforeDate = dateForFilter)
-        val actualFeedbacks = feedbackDao.searchFeedbacks(filter, companyId)
+        val actualFeedbacks = feedbackDao.searchFeedbacks(companyId,filter)
 
         assertEquals(emptyList<Feedback>(), actualFeedbacks)
     }
@@ -165,13 +165,13 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
     @Test
     fun `search feedbacks by before date and is not anonymous `() {
 
-        val feedbackId1 = feedbackDao.createFeedback(feedback1, userLoggedInDetails)
-        val feedbackId2 = feedbackDao.createFeedback(feedback2, userLoggedInDetails)
+        val feedbackId1 = feedbackDao.createFeedback(userLoggedInDetails,feedback1)
+        val feedbackId2 = feedbackDao.createFeedback(userLoggedInDetails,feedback2)
 
         val dateForFilter = LocalDate.now().plusDays(3).toString()
         val filter = FeedbackFilter(beforeDate = dateForFilter, isAnonymous = false)
 
-        val actualFeedbacks = feedbackDao.searchFeedbacks(filter, companyId)
+        val actualFeedbacks = feedbackDao.searchFeedbacks(companyId,filter)
         val expectedFeedbacks = listOf(
             Feedback(
                 feedbackId1,
@@ -199,14 +199,14 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
             userLoggedInDetails
         )
         val feedbackId1 =
-            feedbackDao.createFeedback(feedback1, userLoggedInDetails.copy(employeeId = idEmployeeGenerated1))
+            feedbackDao.createFeedback( userLoggedInDetails.copy(employeeId = idEmployeeGenerated1),feedback1)
         val feedbackId2 =
-            feedbackDao.createFeedback(feedback2, userLoggedInDetails.copy(employeeId = idEmployeeGenerated2))
+            feedbackDao.createFeedback( userLoggedInDetails.copy(employeeId = idEmployeeGenerated2),feedback2)
 
         val dateForFilter = LocalDate.now().minusDays(3).toString()
         val filter = FeedbackFilter(department = Department.Sales.toString(), afterDate = dateForFilter)
 
-        val actualFeedbacks = feedbackDao.searchFeedbacks(filter, companyId)
+        val actualFeedbacks = feedbackDao.searchFeedbacks(companyId,filter)
         val expectedFeedbacks = listOf(
             Feedback(
                 feedbackId1,
@@ -225,10 +225,10 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
     @Test
     fun `search with out filters return all feedbacks `() {
 
-        val feedBackId1 = feedbackDao.createFeedback(feedback1, userLoggedInDetails)
+        val feedBackId1 = feedbackDao.createFeedback(userLoggedInDetails,feedback1)
 
         val filter = FeedbackFilter()
-        val actualFeedbacks = feedbackDao.searchFeedbacks(filter, companyId)
+        val actualFeedbacks = feedbackDao.searchFeedbacks(companyId,filter)
         val expectedFeedbacks = listOf(
             Feedback(
                 feedBackId1,
@@ -247,8 +247,8 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
 
     @Test
     fun `get status should return correct status for given feedback`() {
-        val feedbackId = feedbackDao.createFeedback(feedback1, userLoggedInDetails)
-        val status = feedbackDao.getStatus(feedbackId, userLoggedInDetails)
+        val feedbackId = feedbackDao.createFeedback(userLoggedInDetails,feedback1)
+        val status = feedbackDao.getStatus( userLoggedInDetails,feedbackId)
 
         assertEquals(Status.UNREVIEWED.toString(), status)
     }
@@ -257,24 +257,24 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
     @Test
     fun `get status should return null for non-existing feedback`() {
         val nonExistingFeedbackId = Random.nextLong()
-        val status = feedbackDao.getStatus(nonExistingFeedbackId, userLoggedInDetails)
+        val status = feedbackDao.getStatus( userLoggedInDetails,nonExistingFeedbackId)
         assertNull(status)
     }
 
     @Test
     fun `update status should update the status of the feedback`() {
 
-        val feedbackId = feedbackDao.createFeedback(feedback1, userLoggedInDetails)
-        feedbackDao.updateStatus(Status.REVIEWED, feedbackId, userLoggedInDetails)
+        val feedbackId = feedbackDao.createFeedback(userLoggedInDetails,feedback1)
+        feedbackDao.updateStatus(Status.REVIEWED, feedbackId, companyId)
 
-        val actualStatus = feedbackDao.getStatus(feedbackId, userLoggedInDetails)
+        val actualStatus = feedbackDao.getStatus(userLoggedInDetails,feedbackId)
         assertEquals(Status.REVIEWED.toString(), actualStatus)
     }
 
     @Test
     fun `update status should not update status for non-existing feedback`() {
         val nonExistingFeedbackId = Random.nextLong()
-        assertEquals(0, feedbackDao.updateStatus(Status.REVIEWED, nonExistingFeedbackId, userLoggedInDetails))
+        assertEquals(0, feedbackDao.updateStatus(Status.REVIEWED, nonExistingFeedbackId, companyId))
     }
 
 
