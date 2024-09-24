@@ -34,11 +34,13 @@ class FeedbackResponseDaoTest @Autowired constructor(private val sql: DSLContext
     }
 
 
-
     @Test
-    fun `get response by id when no response with this id `(){
-        val responseId = feedbackResponseDao.createResponse(userLoggedInDetails,CreationResponse(feedbackId, content = "This is a response"))
-        val actualResponse = feedbackResponseDao.getResponseById(userLoggedInDetails,responseId+1)
+    fun `get response by id when no response with this id `() {
+        val responseId = feedbackResponseDao.createResponse(
+            userLoggedInDetails,
+            CreationResponse(feedbackId, content = "This is a response")
+        )
+        val actualResponse = feedbackResponseDao.getResponseById(companyId, responseId + 1)
         assertNull(actualResponse)
 
 
@@ -47,28 +49,33 @@ class FeedbackResponseDaoTest @Autowired constructor(private val sql: DSLContext
     @Test
     fun `create response without conflict and retrieve by id `() {
         val creationResponse = CreationResponse(feedbackId, content = "This is a response")
-        val responseId = feedbackResponseDao.createResponse(userLoggedInDetails,creationResponse)
+        val responseId = feedbackResponseDao.createResponse(userLoggedInDetails, creationResponse)
 
-        val actualResponse = feedbackResponseDao.getResponseById(userLoggedInDetails,responseId)
-        val expectedResponse = Response(responseId,feedbackId,"This is a response",date,userLoggedInDetails.employeeId )
+        val actualResponse = feedbackResponseDao.getResponseById(companyId, responseId)
+        val expectedResponse =
+            Response(responseId, feedbackId, "This is a response", date, userLoggedInDetails.employeeId)
         assertEquals(expectedResponse, actualResponse)
 
     }
 
     @Test
-    fun `create response with conflict - update the content of the response `(){
-        val responseId1 = feedbackResponseDao.createResponse(userLoggedInDetails,CreationResponse(feedbackId, content = "This is a response"))
-        val responseId2 = feedbackResponseDao.createResponse(userLoggedInDetails,CreationResponse(feedbackId, content = "update response"))
+    fun `create response with conflict - update the content of the response `() {
+        val responseId1 = feedbackResponseDao.createResponse(
+            userLoggedInDetails,
+            CreationResponse(feedbackId, content = "This is a response")
+        )
+        val responseId2 = feedbackResponseDao.createResponse(
+            userLoggedInDetails,
+            CreationResponse(feedbackId, content = "update response")
+        )
 
-        val actualResponse = feedbackResponseDao.getResponseById(userLoggedInDetails,responseId1)
-        val expectedResponse = Response(responseId1,feedbackId,"update response",date,userLoggedInDetails.employeeId )
+        val actualResponse = feedbackResponseDao.getResponseById(companyId, responseId1)
+        val expectedResponse =
+            Response(responseId1, feedbackId, "update response", date, userLoggedInDetails.employeeId)
 
-        assertEquals(responseId1,responseId2)
+        assertEquals(responseId1, responseId2)
         assertEquals(expectedResponse, actualResponse)
     }
-
-
-
 
 
 }
