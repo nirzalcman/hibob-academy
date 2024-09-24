@@ -33,12 +33,11 @@ class FeedbackResponseDaoTest @Autowired constructor(private val sql: DSLContext
         sql.deleteFrom(feedbackTable).where(feedbackTable.companyId.eq(companyId)).execute()
     }
 
-
     @Test
     fun `get response by id when no response with this id `() {
         val responseId = feedbackResponseDao.createResponse(
             userLoggedInDetails,
-            CreationResponse(feedbackId, content = "This is a response")
+            ResponseCreationRequest(feedbackId, content = "This is a response")
         )
         val actualResponse = feedbackResponseDao.getResponseById(companyId, responseId + 1)
         assertNull(actualResponse)
@@ -48,8 +47,8 @@ class FeedbackResponseDaoTest @Autowired constructor(private val sql: DSLContext
 
     @Test
     fun `create response without conflict and retrieve by id `() {
-        val creationResponse = CreationResponse(feedbackId, content = "This is a response")
-        val responseId = feedbackResponseDao.createResponse(userLoggedInDetails, creationResponse)
+        val responseCreationRequest = ResponseCreationRequest(feedbackId, content = "This is a response")
+        val responseId = feedbackResponseDao.createResponse(userLoggedInDetails, responseCreationRequest)
 
         val actualResponse = feedbackResponseDao.getResponseById(companyId, responseId)
         val expectedResponse =
@@ -62,11 +61,11 @@ class FeedbackResponseDaoTest @Autowired constructor(private val sql: DSLContext
     fun `create response with conflict - update the content of the response `() {
         val responseId1 = feedbackResponseDao.createResponse(
             userLoggedInDetails,
-            CreationResponse(feedbackId, content = "This is a response")
+            ResponseCreationRequest(feedbackId, content = "This is a response")
         )
         val responseId2 = feedbackResponseDao.createResponse(
             userLoggedInDetails,
-            CreationResponse(feedbackId, content = "update response")
+            ResponseCreationRequest(feedbackId, content = "update response")
         )
 
         val actualResponse = feedbackResponseDao.getResponseById(companyId, responseId1)
@@ -76,12 +75,4 @@ class FeedbackResponseDaoTest @Autowired constructor(private val sql: DSLContext
         assertEquals(responseId1, responseId2)
         assertEquals(expectedResponse, actualResponse)
     }
-
-
 }
-
-
-
-
-
-

@@ -20,12 +20,12 @@ class FeedbackResponseDao(private val sql: DSLContext) {
         )
     }
 
-    fun createResponse(userLoggedInDetails: UserLoggedInDetails, response: CreationResponse): Long =
+    fun createResponse(userLoggedInDetails: UserLoggedInDetails, responseCreationRequest: ResponseCreationRequest): Long =
 
         sql.insertInto(feedbackResponseTable)
             .set(feedbackResponseTable.companyId, userLoggedInDetails.companyId)
-            .set(feedbackResponseTable.feedbackId, response.feedbackId)
-            .set(feedbackResponseTable.content, response.content)
+            .set(feedbackResponseTable.feedbackId, responseCreationRequest.feedbackId)
+            .set(feedbackResponseTable.content, responseCreationRequest.content)
             .set(feedbackResponseTable.responseBy, userLoggedInDetails.employeeId)
             .onConflict(
                 feedbackResponseTable.companyId,
@@ -33,7 +33,7 @@ class FeedbackResponseDao(private val sql: DSLContext) {
                 feedbackResponseTable.responseBy
             )
             .doUpdate()
-            .set(feedbackResponseTable.content, response.content)
+            .set(feedbackResponseTable.content, responseCreationRequest.content)
             .returningResult(feedbackResponseTable.id)
             .fetchOne()!!
             .get(feedbackResponseTable.id)
