@@ -54,7 +54,7 @@ data class Feedback(
     val lastModifiedStatus: Date?
 )
 
-data class CreationResponse(
+data class ResponseCreationRequest (
     val feedbackId: Long,
     val content: String
 )
