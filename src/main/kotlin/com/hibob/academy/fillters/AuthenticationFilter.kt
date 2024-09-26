@@ -1,4 +1,4 @@
-/*package com.hibob.academy.fillters
+package com.hibob.academy.fillters
 
 import com.hibob.academy.service.SessionService
 import io.jsonwebtoken.Claims
@@ -33,4 +33,3 @@ class AuthenticationFilter(private val sessionService: SessionService) : Contain
 
 }
 
-*/
