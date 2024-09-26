@@ -6,6 +6,7 @@ import com.hibob.academy.employeeFeedback.dao.UserLoggedInDetails
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.Jwts
+import jakarta.ws.rs.ForbiddenException
 import org.springframework.stereotype.Component
 import java.time.Instant
 import java.time.LocalDateTime
@@ -18,6 +19,8 @@ class SessionJwtService(private val employeeDao: EmployeeDao) {
     private val secretKey = "1212121221212121212121212213213233213131232321"
 
     fun createJwtToken(userLoggedInDetails: UserLoggedInDetails): String {
+        if (!employeeDao.userExists(userLoggedInDetails)) throw ForbiddenException("Invalid login")
+
         return Jwts.builder()
             .setHeaderParam("typ", "JWT")
             .claim("employeeId", userLoggedInDetails.employeeId)
