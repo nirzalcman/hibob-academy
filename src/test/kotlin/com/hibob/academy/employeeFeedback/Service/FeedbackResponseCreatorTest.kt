@@ -10,7 +10,6 @@ import org.mockito.kotlin.whenever
 import org.mockito.kotlin.verify
 import kotlin.random.Random
 
-
 class FeedbackResponseCreatorTest {
     private val feedbackResponseDaoMock = mock<FeedbackResponseDao>()
     private val feedbackResponseCreator = FeedbackResponseCreator(feedbackResponseDaoMock)
