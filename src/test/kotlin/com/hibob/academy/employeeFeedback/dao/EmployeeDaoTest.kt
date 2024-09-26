@@ -44,14 +44,7 @@ class EmployeeDaoTest @Autowired constructor(private val sql: DSLContext) {
         val createdEmployeeId = employeeDao.createEmployee(userLoggedInDetails, creationEmployee)
         val retrievedRole = employeeDao.getRole(userLoggedInDetails.copy(employeeId = createdEmployeeId))
 
-        assertEquals("EMPLOYEE", retrievedRole)
+        assertEquals(Role.EMPLOYEE, retrievedRole)
     }
 
-    @Test
-    fun `get role returns null for non-existent employee`() {
-        val nonExistentEmployeeId = employeeId + 1
-        val retrievedRole = employeeDao.getRole(userLoggedInDetails.copy(employeeId = nonExistentEmployeeId))
-
-        assertNull(retrievedRole)
-    }
 }
