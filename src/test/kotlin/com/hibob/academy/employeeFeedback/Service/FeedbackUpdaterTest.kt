@@ -10,9 +10,9 @@ import org.mockito.kotlin.verify
 import kotlin.random.Random
 import jakarta.ws.rs.NotFoundException
 
-class FeedbackUpdateorTest {
+class FeedbackUpdaterTest {
     private val feedbackDaoMock = mock<FeedbackDao>()
-    private val feedbackUpdateor = FeedbackUpdateor(feedbackDaoMock)
+    private val feedbackUpdater = FeedbackUpdater(feedbackDaoMock)
     private val companyId = Random.nextLong()
     private val feedbackId = Random.nextLong()
 
@@ -22,7 +22,7 @@ class FeedbackUpdateorTest {
         val status = Status.REVIEWED
         whenever(feedbackDaoMock.updateStatus(companyId, status, feedbackId)).thenReturn(1)
 
-        val result = feedbackUpdateor.updateStatus(companyId, status, feedbackId)
+        val result = feedbackUpdater.updateStatus(companyId, status, feedbackId)
 
         assertTrue(result)
         verify(feedbackDaoMock).updateStatus(companyId, status, feedbackId)
@@ -34,7 +34,7 @@ class FeedbackUpdateorTest {
         whenever(feedbackDaoMock.updateStatus(companyId, status, feedbackId)).thenReturn(0)
 
         val exception = assertThrows(NotFoundException::class.java) {
-            feedbackUpdateor.updateStatus(companyId, status, feedbackId)
+            feedbackUpdater.updateStatus(companyId, status, feedbackId)
         }
         assertEquals("Feedback $feedbackId not found", exception.message)
         verify(feedbackDaoMock).updateStatus(companyId, status, feedbackId)

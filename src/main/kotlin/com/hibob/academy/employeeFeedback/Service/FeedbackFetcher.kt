@@ -5,7 +5,11 @@ import com.hibob.academy.employeeFeedback.dao.FeedbackDao
 import com.hibob.academy.employeeFeedback.dao.FeedbackFilter
 import com.hibob.academy.employeeFeedback.dao.UserLoggedInDetails
 import jakarta.ws.rs.NotFoundException
+import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 
+
+@Service
 class FeedbackFetcher(private val feedbackDao: FeedbackDao) {
 
     fun getFeedbackById(companyId: Long, feedbackId: Long): Feedback =

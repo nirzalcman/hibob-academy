@@ -3,8 +3,10 @@ package com.hibob.academy.employeeFeedback.Service
 import com.hibob.academy.employeeFeedback.dao.CreationFeedback
 import com.hibob.academy.employeeFeedback.dao.FeedbackDao
 import com.hibob.academy.employeeFeedback.dao.UserLoggedInDetails
+import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 
-
+@Service
 class FeedbackCreator(private val feedbackDao: FeedbackDao) {
     fun createFeedBack(userLoggedInDetails: UserLoggedInDetails, feedback: CreationFeedback): Long {
         validateFeedback(feedback)
