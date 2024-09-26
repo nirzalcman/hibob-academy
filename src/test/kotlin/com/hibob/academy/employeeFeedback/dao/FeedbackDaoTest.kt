@@ -251,16 +251,9 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
         val feedbackId = feedbackDao.createFeedback(userLoggedInDetails, feedback1)
         val status = feedbackDao.getStatus(userLoggedInDetails, feedbackId)
 
-        assertEquals(Status.UNREVIEWED.toString(), status)
+        assertEquals(Status.UNREVIEWED, status)
     }
 
-
-    @Test
-    fun `get status should return null for non-existing feedback`() {
-        val nonExistingFeedbackId = Random.nextLong()
-        val status = feedbackDao.getStatus(userLoggedInDetails, nonExistingFeedbackId)
-        assertNull(status)
-    }
 
     @Test
     fun `update status should update the status of the feedback`() {
@@ -269,7 +262,7 @@ class FeedbackDaoTest @Autowired constructor(private val sql: DSLContext) {
         feedbackDao.updateStatus(companyId, Status.REVIEWED, feedbackId)
 
         val actualStatus = feedbackDao.getStatus(userLoggedInDetails, feedbackId)
-        assertEquals(Status.REVIEWED.toString(), actualStatus)
+        assertEquals(Status.REVIEWED, actualStatus)
     }
 
     @Test

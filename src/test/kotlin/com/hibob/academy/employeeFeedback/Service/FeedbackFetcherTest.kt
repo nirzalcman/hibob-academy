@@ -93,7 +93,7 @@ class FeedbackFetcherTest {
     fun `test getStatus returns status`() {
         val userLoggedInDetails = UserLoggedInDetails(employeeId, companyId)
         val expectedStatus = Status.UNREVIEWED
-        whenever(feedbackDaoMock.getStatus(userLoggedInDetails, feedbackId)).thenReturn(expectedStatus.toString())
+        whenever(feedbackDaoMock.getStatus(userLoggedInDetails, feedbackId)).thenReturn(expectedStatus)
 
         val result = feedbackFetcher.getStatus(userLoggedInDetails, feedbackId)
 
@@ -101,14 +101,4 @@ class FeedbackFetcherTest {
         verify(feedbackDaoMock).getStatus(userLoggedInDetails, feedbackId)
     }
 
-    @Test
-    fun `test getStatus throws NotFoundException if feedback not found`() {
-        val userLoggedInDetails = UserLoggedInDetails(employeeId, companyId)
-        whenever(feedbackDaoMock.getStatus(userLoggedInDetails, feedbackId)).thenReturn(null)
-
-        val exception = assertThrows(NotFoundException::class.java) {
-            feedbackFetcher.getStatus(userLoggedInDetails, feedbackId)
-        }
-        assertEquals("Feedback $feedbackId not found", exception.message)
-    }
 }

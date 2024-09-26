@@ -18,13 +18,7 @@ class FeedbackFetcher(private val feedbackDao: FeedbackDao) {
     fun getFeedbacksByFilters(companyId: Long, filter: FeedbackFilter): List<Feedback> =
         feedbackDao.searchFeedbacks(companyId, filter)
 
-    fun getStatus(userLoggedInDetails: UserLoggedInDetails, feedbackId: Long): Status {
-        val status = feedbackDao.getStatus(userLoggedInDetails, feedbackId)
-        return status?.let {
-            enumValueOf<Status>(status)
-        } ?: throw NotFoundException("Feedback $feedbackId not found")
+    fun getStatus(userLoggedInDetails: UserLoggedInDetails, feedbackId: Long): Status =
+        feedbackDao.getStatus(userLoggedInDetails, feedbackId)
 
-    }
 }
-
-
