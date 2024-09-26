@@ -1,8 +1,7 @@
 package com.hibob.academy.employeeFeedback.dao
 
-import org.jooq.RecordMapper
+
 import org.jooq.DSLContext
-import org.jooq.Record
 import org.springframework.stereotype.Component
 
 @Component
@@ -19,5 +18,19 @@ class EmployeeDao(private val sql: DSLContext) {
             .returning(employeeTable.id)
             .fetchOne()!!
             .get(employeeTable.id)
+
+
+    fun getRole(userLoggedInDetails: UserLoggedInDetails): Role {
+        val roleString = sql.select(employeeTable.role)
+            .from(employeeTable)
+            .where(employeeTable.id.eq(userLoggedInDetails.employeeId))
+            .and(employeeTable.companyId.eq(userLoggedInDetails.companyId))
+            .fetchOne()
+            ?.get(employeeTable.role)
+
+        return roleString?.let {
+            enumValueOf<Role>(it)
+        } ?: throw IllegalStateException("Role is mandatory but not found for employee ID ${userLoggedInDetails.employeeId} and company ID ${userLoggedInDetails.companyId}")
+    }
 
 }
