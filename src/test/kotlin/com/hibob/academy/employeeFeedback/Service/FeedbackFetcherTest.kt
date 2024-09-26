@@ -92,8 +92,8 @@ class FeedbackFetcherTest {
     @Test
     fun `test getStatus returns status`() {
         val userLoggedInDetails = UserLoggedInDetails(employeeId, companyId)
-        val expectedStatus = Status.UNREVIEWED.toString()
-        whenever(feedbackDaoMock.getStatus(userLoggedInDetails, feedbackId)).thenReturn(expectedStatus)
+        val expectedStatus = Status.UNREVIEWED
+        whenever(feedbackDaoMock.getStatus(userLoggedInDetails, feedbackId)).thenReturn(expectedStatus.toString())
 
         val result = feedbackFetcher.getStatus(userLoggedInDetails, feedbackId)
 
