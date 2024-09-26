@@ -1,8 +1,6 @@
-package com.hibob.academy.fillters
+/*package com.hibob.academy.fillters
 
 import com.hibob.academy.service.SessionService
-import io.jsonwebtoken.Claims
-import io.jsonwebtoken.Jwts
 import jakarta.ws.rs.container.ContainerRequestContext
 import jakarta.ws.rs.container.ContainerRequestFilter
 import jakarta.ws.rs.core.Cookie
@@ -15,7 +13,7 @@ const val JWT_COOKIE_NAME = "jwt"
 const val PATH = "api/user_session"
 @Provider
 @Component
-class AuthenticationFilter(private val sessionService: SessionService) : ContainerRequestFilter {
+class AuthenticationFillter(private val sessionService: SessionService) : ContainerRequestFilter {
     override fun filter(requestContext: ContainerRequestContext) {
         if (requestContext.uriInfo.path == PATH) return
         val jwtCookie: Cookie? = requestContext.cookies[JWT_COOKIE_NAME]
@@ -33,3 +31,4 @@ class AuthenticationFilter(private val sessionService: SessionService) : Contain
 
 }
 
+*/
