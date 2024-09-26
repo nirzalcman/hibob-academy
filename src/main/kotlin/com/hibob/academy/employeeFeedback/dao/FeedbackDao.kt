@@ -113,13 +113,17 @@ class FeedbackDao(private val sql: DSLContext) {
             .execute()
 
 
-    fun getStatus(userLoggedInDetails: UserLoggedInDetails, feedbackId: Long): String? {
-        return sql.select(feedBackTable.status)
+    fun getStatus(userLoggedInDetails: UserLoggedInDetails, feedbackId: Long): Status {
+        val status = sql.select(feedBackTable.status)
             .from(feedBackTable)
             .where(feedBackTable.id.eq(feedbackId))
             .and(feedBackTable.companyId.eq(userLoggedInDetails.companyId))
             .and(feedBackTable.employeeId.eq(userLoggedInDetails.employeeId))
             .fetchOne()
             ?.get(feedBackTable.status)
+
+        return status?.let {
+            enumValueOf<Status>(it)
+        } ?: throw IllegalStateException(" Status is mandatory ")
     }
 }
