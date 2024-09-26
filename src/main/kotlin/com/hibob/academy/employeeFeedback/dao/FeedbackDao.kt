@@ -104,9 +104,10 @@ class FeedbackDao(private val sql: DSLContext) {
             .fetch(feedBackMapper)
     }
 
-    fun updateStatus(status: Status, feedbackId: Long, companyId: Long): Int =
+    fun updateStatus(companyId: Long,status: Status, feedbackId: Long): Int =
         sql.update(feedBackTable)
             .set(feedBackTable.status, status.toString())
+            .set(feedBackTable.lastModifiedStatus,Date.valueOf(LocalDate.now()))
             .where(feedBackTable.id.eq(feedbackId))
             .and(feedBackTable.companyId.eq(companyId))
             .execute()
