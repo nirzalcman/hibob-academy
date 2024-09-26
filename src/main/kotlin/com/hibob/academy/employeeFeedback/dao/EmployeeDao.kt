@@ -20,4 +20,15 @@ class EmployeeDao(private val sql: DSLContext) {
             .fetchOne()!!
             .get(employeeTable.id)
 
+
+    fun getRole(userLoggedInDetails: UserLoggedInDetails): String? {
+        return sql.select(employeeTable.role)
+            .from(employeeTable)
+            .where(employeeTable.id.eq(userLoggedInDetails.employeeId))
+            .and(employeeTable.companyId.eq(userLoggedInDetails.companyId))
+            .fetchOne()
+            ?.get(employeeTable.role)
+    }
+
+
 }
