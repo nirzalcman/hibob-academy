@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component
 
 const val JWT_COOKIE_NAME = "jwt"
 const val LOGIN_PATH = "api/user_login"
+private const val EMPLOYEE_ID = "employeeId"
+private const val COMPANY_ID = "companyId"
 
 @Provider
 @Component
@@ -31,19 +33,15 @@ class AuthenticationFilter(
             return
         }
 
-        val employeeId = getEmployeeIdFromToken(claims)
-        val companyId = getCompanyIdFromToken(claims)
-        requestContext.setProperty("employeeId", employeeId)
-        requestContext.setProperty("companyId", companyId)
+        val employeeId = getValueFromClaims(claims, EMPLOYEE_ID)
+        val companyId = getValueFromClaims(claims, COMPANY_ID)
+
+        requestContext.setProperty(EMPLOYEE_ID, employeeId)
+        requestContext.setProperty(COMPANY_ID, companyId)
     }
 
-    private fun getEmployeeIdFromToken(claims: Claims): Long {
-        return claims.get("employeeId").toString().toLong()
-
-    }
-
-    private fun getCompanyIdFromToken(claims: Claims): Long {
-        return claims.get("companyId").toString().toLong()
+    private fun getValueFromClaims(claims: Claims, key: String): Long {
+        return claims.get(key).toString().toLong()
     }
 
 }
