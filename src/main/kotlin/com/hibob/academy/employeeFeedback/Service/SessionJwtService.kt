@@ -18,6 +18,7 @@ class SessionJwtService(private val employeeDao: EmployeeDao) {
     private val secretKey = "1212121221212121212121212213213233213131232321"
 
     fun createJwtToken(userLoggedInDetails: UserLoggedInDetails): String {
+
         return Jwts.builder()
             .setHeaderParam("typ", "JWT")
             .claim("employeeId", userLoggedInDetails.employeeId)

@@ -30,7 +30,8 @@ class EmployeeDao(private val sql: DSLContext) {
 
         return roleString?.let {
             enumValueOf<Role>(it)
-        } ?: throw IllegalStateException("Role is mandatory but not found for employee ID ${userLoggedInDetails.employeeId} and company ID ${userLoggedInDetails.companyId}")
+        }
+            ?: throw IllegalStateException("Role is mandatory but not found for employee ID ${userLoggedInDetails.employeeId} and company ID ${userLoggedInDetails.companyId}")
     }
 
 }
